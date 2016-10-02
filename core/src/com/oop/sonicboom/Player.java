@@ -1,33 +1,23 @@
 package com.oop.sonicboom;
 
-public class Player {
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.Fixture;
+import com.badlogic.gdx.physics.box2d.World;
+
+public class Player extends Sprite{
 	
-	protected float x, y;
-	protected float width, height;
+	protected World world;
+	protected GameScreen game;
+	protected Body body;
+	protected Fixture fixture;
 	
-	public float getX() {
-		return x;
-	}
-	public void setX(float x) {
-		this.x = x;
-	}
-	public float getY() {
-		return y;
-	}
-	public void setY(float y) {
-		this.y = y;
-	}
-	public float getWidth() {
-		return width;
-	}
-	public void setWidth(float width) {
-		this.width = width;
-	}
-	public float getHeight() {
-		return height;
-	}
-	public void setHeight(float height) {
-		this.height = height;
+	public Player(World world, GameScreen game){
+		this.world = world;
+		this.game = game;
+		
+		body = game.parser.getBodies().get("player");
+		fixture = game.parser.getFixtures().get("player");
 	}
 
 }
