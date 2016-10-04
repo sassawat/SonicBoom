@@ -1,55 +1,61 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="40" height="15" tilewidth="96" tileheight="96" nextobjectid="14">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="40" height="15" tilewidth="96" tileheight="96" nextobjectid="92">
  <tileset firstgid="1" name="Neo_Green_Hill_Act_1_Tile_Sheet" tilewidth="96" tileheight="96" tilecount="180" columns="20">
   <image source="Neo_Green_Hill_Act_1_Tile_Sheet.png" width="1920" height="864"/>
  </tileset>
- <layer name="deloop" width="40" height="15">
+ <layer name="background" width="40" height="15">
   <data encoding="base64" compression="zlib">
-   eJxjYBgFo2AU0BoYD7QDCAD3gXYAiWA0PEfBKBgFgx0AAMEcAPU=
+   eJxjYBgFo2AU0BoYD7QDCAD3gXYAiWA0PEfBKKAOCCFADzSIJEAPZgAAbwkDqQ==
   </data>
  </layer>
- <layer name="Ground" width="40" height="15">
+ <layer name="midground" width="40" height="15">
   <data encoding="base64" compression="zlib">
-   eJzt0F0KgkAUQGHX4SJ6EKzUfhTUBzWINlHtoFbQPvLRdI0ewQERVLAZM/DCxzwMczmMpi2zzP/Pqja3MRTvN7HGBltYsOFghz0OOMKFV7+p+AgQ4tLaK+s/owExEpw67s/Q8eroVN03RPQJsjtl98nuVNXX7LzihvsP+vra2h54zrhvTOPUfaLxjXSCvuwLH+Qoes4SIKRJ2w==
+   eJzt0G0KgjAcgHHP0SHChLIyy6D60AuElzBvYCfoHvUx84w9wQYxcEJtvoB/+LEPY9vDHKeffro/Q6HJcTESXMGz/OYYE/iYYoY5AiwQYokVIqzFmY8NttghVu419Z/7CgcccSrZP2OAW0mn7b4qsk8y3Wm6z3Snrb7vzgQXpA306dpUGa4t7vulse4+2XjHo4a+5x9yvFBo1jfYS0rN
   </data>
  </layer>
- <layer name="enLoop" width="40" height="15">
+ <layer name="foreground" width="40" height="15">
   <data encoding="base64" compression="zlib">
-   eJxjYBgFo2AU0APwDLQD8AAJIJYcaEfgAVJALI0mNhqe5ANs4TkKRsEooC4AAAEcAOU=
-  </data>
- </layer>
- <layer name="Tree" width="40" height="15">
-  <data encoding="base64" compression="zlib">
-   eJxjYBgFo2AUEANYCfAHGvCj8QUGxBWjYBSMgqEEQgjQAw0iCdD0BhpArAllawOxDpSvi0UtAL/FA9w=
-  </data>
- </layer>
- <layer name="BalconyGround" width="40" height="15">
-  <data encoding="base64" compression="zlib">
-   eJxjYBgFo2AUUAMYALEhFBtA8SgYBaNgFIyCkQkAwQcA8w==
-  </data>
- </layer>
- <layer name="BalconyPF" width="40" height="15">
-  <data encoding="base64" compression="zlib">
-   eJxjYBgFo2DoACYoHoyADYjZgZgDiT+YgOBAO2AUjIJRMApGEAAAJDsAMQ==
-  </data>
- </layer>
- <layer name="Rail" width="40" height="15">
-  <data encoding="base64" compression="zlib">
-   eJxjYBgFo2AUjIJRMJIBMxCzDLQjCAA+IFYYaEcQAKNupA4YCm7UIkINAGU/AOo=
+   eJxjYBgFo2DoACYopjdgJUKMDYjZgZgDymZDk+ehgbtggB+LmAAaXxCPfgkglqSec6gOpIBYGk2MluFJKRhq4ckMxCwD5BZiAR8QKwy0IwiAUTdSBwxmN2oAsSYQawGxNhDrQPm6WNQCAKTdAys=
   </data>
  </layer>
  <objectgroup name="Ground">
   <object id="3" name="ground" type="object" x="1.66667" y="650.333">
-   <polyline points="0,0 51,-3.66667 115.333,0 180.333,-18.6667 258.333,-46.6667 298.333,-48.6667 333.333,-41.3333 382,-25 397.667,-17 453.333,-0.333333 495.667,0 514.667,-3.33333 550.667,-20 563.333,-23 607,-25.3333 651.667,-26 683.333,-22.6667 694.667,-20 726,-4.33333 734.333,-1.33333 770.667,0 786.667,2 822,18.3333 836.667,22.6667 856.667,24.6667 905.667,22 930.333,21 974.667,24 1011.67,16.3333 1052.67,0.666667 1077.33,-8.33333 1109.67,-18.6667 1133,-24 1165,-24 1179.67,-21.6667 1246,-1 1277,-2.33333 1311.33,-3.00003 1345.66,0 1379.67,-2.33337 1404.67,-3.33333 1432.33,-0.333333 1487.67,-0.333333 1498,-2 1507.33,-6.33333 1516.33,-12.6667 1521.67,-18.3333 1527.33,-27 1531,-37 1532.67,-45.6667 1536.33,-68"/>
+   <properties>
+    <property name="categoryBits" value="1"/>
+   </properties>
+   <polyline points="-2,-2 52.6667,-2 116.333,-2 180.333,-18.6667 258.333,-46.6667 298.333,-48.6667 333.333,-41.3333 382,-25 397.667,-17 453.333,-0.333333 495.667,0 514.667,-3.33333 550.667,-20 563.333,-23 607,-25.3333 651.667,-26 683.333,-22.6667 694.667,-20 726,-4.33333 734.333,-1.33333 770.667,0 786.667,2 822,18.3333 836.667,22.6667 856.667,24.6667 905.667,22 930.333,21 974.667,24 1011.67,16.3333 1052.67,0.666667 1077.33,-8.33333 1109.67,-18.6667 1133,-24 1165,-24 1179.67,-21.6667 1245.75,-2 1277.5,-0.83333 1311.08,-1.00003 1345.91,-1 1377.67,-0.83337 1404.42,-0.83333 1432.33,-0.333333 1487.67,-0.333333 1498,-2 1507.33,-6.33333 1516.33,-12.6667 1521.67,-18.3333 1527.33,-27 1531,-37 1532.67,-45.6667 1536.33,-68"/>
   </object>
-  <object id="4" name="ground" type="object" x="1536" y="552.333" width="49.6667" height="120"/>
+  <object id="4" name="ground" type="object" x="1536" y="552.333" width="49.6667" height="120">
+   <properties>
+    <property name="categoryBits" value="1"/>
+   </properties>
+  </object>
   <object id="5" x="1604" y="654" height="0.333333"/>
-  <object id="6" name="ground" type="object" x="2909.5" y="1368.5" width="930.5" height="8.75"/>
+  <object id="6" name="ground" type="object" x="2909.5" y="1368.5" width="930.5" height="8.75">
+   <properties>
+    <property name="categoryBits" value="1"/>
+   </properties>
+  </object>
   <object id="7" name="ground" type="object" x="1586" y="553">
+   <properties>
+    <property name="categoryBits" value="1"/>
+   </properties>
    <polyline points="0,0 814,407.75 992.75,407.75 1009,411.75 1341,742.75 1398.75,787.5 1454,816.25"/>
   </object>
   <object id="9" name="ground" type="object" x="2112.25" y="650" width="191.25" height="22"/>
   <object id="10" name="ground" type="object" x="1728.18" y="458" width="191.636" height="21.8182"/>
+  <object id="16" name="test" type="object" x="2061.5" y="198.5">
+   <polyline points="-47.7273,-0.272727 7.75,-0.375 15.375,-1.75 24,-4 32,-7.5 40.5,-12.125 48.125,-17.125 54.75,-23.125 60.75,-30 65.875,-38.125 70.75,-46.125 72.5,-51.625 74.25,-57.75 75.75,-64.75 76.25,-70 76.25,-76.5"/>
+  </object>
+  <object id="17" name="test" type="object" x="2061.65" y="122.167">
+   <polyline points="0,-76.5 7.75,-76.125 15.375,-74.75 24,-72.5 32,-69 40.5,-64.375 48.125,-59.375 54.75,-53.375 60.75,-46.5 65.875,-38.375 70.75,-30.375 72.5,-24.875 74.25,-18.75 75.75,-11.75 76.25,-6.5 76.25,0"/>
+  </object>
+  <object id="18" name="test" type="object" x="1984.31" y="122.167">
+   <polyline points="76.25,-76.5 68.5,-76.125 60.875,-74.75 52.25,-72.5 44.25,-69 35.75,-64.375 28.125,-59.375 21.5,-53.375 15.5,-46.5 10.375,-38.375 5.5,-30.375 3.75,-24.875 2,-18.75 0.5,-11.75 0,-6.5 0,0"/>
+  </object>
+  <object id="19" name="test" type="object" x="2032.16" y="198.833">
+   <polyline points="76.25,-0.272727 20.7727,-0.375 13.1477,-1.75 4.5227,-4 -3.4773,-7.5 -11.9773,-12.125 -19.6023,-17.125 -26.2273,-23.125 -32.2273,-30 -37.3523,-38.125 -42.2273,-46.125 -43.9773,-51.625 -45.7273,-57.75 -47.2273,-64.75 -47.7273,-70 -47.7273,-76.5"/>
+  </object>
  </objectgroup>
  <objectgroup name="MapLimit">
   <object id="2" name="LimitLine" type="object" x="0" y="0">
@@ -59,15 +65,197 @@
  <objectgroup name="enLoop"/>
  <objectgroup name="deLoop"/>
  <objectgroup name="Rail"/>
- <objectgroup name="Rings"/>
+ <objectgroup name="Rings">
+  <object id="28" name="ring" type="object" x="251.333" y="569" width="16" height="16">
+   <properties>
+    <property name="categoryBits" value="4"/>
+    <property name="isSensor" value="true"/>
+   </properties>
+  </object>
+  <object id="63" name="ring" type="object" x="278" y="569.333" width="16" height="16">
+   <properties>
+    <property name="categoryBits" value="4"/>
+    <property name="isSensor" value="true"/>
+   </properties>
+  </object>
+  <object id="64" name="ring" type="object" x="305.333" y="570" width="16" height="16">
+   <properties>
+    <property name="categoryBits" value="4"/>
+    <property name="isSensor" value="true"/>
+   </properties>
+  </object>
+  <object id="65" name="ring" type="object" x="646.333" y="589.167" width="16" height="16">
+   <properties>
+    <property name="categoryBits" value="4"/>
+    <property name="isSensor" value="true"/>
+   </properties>
+  </object>
+  <object id="66" name="ring" type="object" x="592.333" y="588.167" width="16" height="16">
+   <properties>
+    <property name="categoryBits" value="4"/>
+    <property name="isSensor" value="true"/>
+   </properties>
+  </object>
+  <object id="67" name="ring" type="object" x="619" y="588.5" width="16" height="16">
+   <properties>
+    <property name="categoryBits" value="4"/>
+    <property name="isSensor" value="true"/>
+   </properties>
+  </object>
+  <object id="68" name="ring" type="object" x="937.667" y="639.167" width="16" height="16">
+   <properties>
+    <property name="categoryBits" value="4"/>
+    <property name="isSensor" value="true"/>
+   </properties>
+  </object>
+  <object id="69" name="ring" type="object" x="883.667" y="638.167" width="16" height="16">
+   <properties>
+    <property name="categoryBits" value="4"/>
+    <property name="isSensor" value="true"/>
+   </properties>
+  </object>
+  <object id="70" name="ring" type="object" x="910.334" y="638.5" width="16" height="16">
+   <properties>
+    <property name="categoryBits" value="4"/>
+    <property name="isSensor" value="true"/>
+   </properties>
+  </object>
+  <object id="71" name="ring" type="object" x="1373" y="619.833" width="16" height="16">
+   <properties>
+    <property name="categoryBits" value="4"/>
+    <property name="isSensor" value="true"/>
+   </properties>
+  </object>
+  <object id="72" name="ring" type="object" x="1319" y="618.833" width="16" height="16">
+   <properties>
+    <property name="categoryBits" value="4"/>
+    <property name="isSensor" value="true"/>
+   </properties>
+  </object>
+  <object id="73" name="ring" type="object" x="1345.67" y="619.166" width="16" height="16">
+   <properties>
+    <property name="categoryBits" value="4"/>
+    <property name="isSensor" value="true"/>
+   </properties>
+  </object>
+  <object id="74" name="ring" type="object" x="1691" y="576.5" width="16" height="16">
+   <properties>
+    <property name="categoryBits" value="4"/>
+    <property name="isSensor" value="true"/>
+   </properties>
+  </object>
+  <object id="75" name="ring" type="object" x="1926.33" y="686.167" width="16" height="16">
+   <properties>
+    <property name="categoryBits" value="4"/>
+    <property name="isSensor" value="true"/>
+   </properties>
+  </object>
+  <object id="76" name="ring" type="object" x="1663.66" y="561.166" width="16" height="16">
+   <properties>
+    <property name="categoryBits" value="4"/>
+    <property name="isSensor" value="true"/>
+   </properties>
+  </object>
+  <object id="77" name="ring" type="object" x="1637.34" y="547.334" width="16" height="16">
+   <properties>
+    <property name="categoryBits" value="4"/>
+    <property name="isSensor" value="true"/>
+   </properties>
+  </object>
+  <object id="78" name="ring" type="object" x="1954" y="700" width="16" height="16">
+   <properties>
+    <property name="categoryBits" value="4"/>
+    <property name="isSensor" value="true"/>
+   </properties>
+  </object>
+  <object id="79" name="ring" type="object" x="1980.67" y="715.333" width="16" height="16">
+   <properties>
+    <property name="categoryBits" value="4"/>
+    <property name="isSensor" value="true"/>
+   </properties>
+  </object>
+  <object id="80" name="ring" type="object" x="2373.17" y="913.25" width="16" height="16">
+   <properties>
+    <property name="categoryBits" value="4"/>
+    <property name="isSensor" value="true"/>
+   </properties>
+  </object>
+  <object id="81" name="ring" type="object" x="2346.5" y="897.917" width="16" height="16">
+   <properties>
+    <property name="categoryBits" value="4"/>
+    <property name="isSensor" value="true"/>
+   </properties>
+  </object>
+  <object id="82" name="ring" type="object" x="2318.83" y="884.084" width="16" height="16">
+   <properties>
+    <property name="categoryBits" value="4"/>
+    <property name="isSensor" value="true"/>
+   </properties>
+  </object>
+  <object id="83" name="ring" type="object" x="3147.34" y="1332.42" width="16" height="16">
+   <properties>
+    <property name="categoryBits" value="4"/>
+    <property name="isSensor" value="true"/>
+   </properties>
+  </object>
+  <object id="84" name="ring" type="object" x="3118.25" y="1332.17" width="16" height="16">
+   <properties>
+    <property name="categoryBits" value="4"/>
+    <property name="isSensor" value="true"/>
+   </properties>
+  </object>
+  <object id="85" name="ring" type="object" x="3087.5" y="1332.75" width="16" height="16">
+   <properties>
+    <property name="categoryBits" value="4"/>
+    <property name="isSensor" value="true"/>
+   </properties>
+  </object>
+  <object id="86" name="ring" type="object" x="2959.58" y="1284.78" width="16" height="16" rotation="34.3211">
+   <properties>
+    <property name="categoryBits" value="4"/>
+    <property name="isSensor" value="true"/>
+   </properties>
+  </object>
+  <object id="87" name="ring" type="object" x="2985.65" y="1301.57" width="16" height="16" rotation="34.3211">
+   <properties>
+    <property name="categoryBits" value="4"/>
+    <property name="isSensor" value="true"/>
+   </properties>
+  </object>
+  <object id="88" name="ring" type="object" x="3008.23" y="1316.99" width="16" height="16" rotation="34.3211">
+   <properties>
+    <property name="categoryBits" value="4"/>
+    <property name="isSensor" value="true"/>
+   </properties>
+  </object>
+  <object id="89" name="ring" type="object" x="3496.08" y="1337.29" width="16" height="16">
+   <properties>
+    <property name="categoryBits" value="4"/>
+    <property name="isSensor" value="true"/>
+   </properties>
+  </object>
+  <object id="90" name="ring" type="object" x="3526.83" y="1336.71" width="16" height="16">
+   <properties>
+    <property name="categoryBits" value="4"/>
+    <property name="isSensor" value="true"/>
+   </properties>
+  </object>
+  <object id="91" name="ring" type="object" x="3555.92" y="1336.96" width="16" height="16">
+   <properties>
+    <property name="categoryBits" value="4"/>
+    <property name="isSensor" value="true"/>
+   </properties>
+  </object>
+ </objectgroup>
  <objectgroup name="BalconyGround"/>
  <objectgroup name="Platforms"/>
  <objectgroup name="Player">
-  <object id="12" name="player" type="object" x="53.3333" y="575.333" width="34" height="34">
+  <object id="12" name="player" type="object" x="47.8433" y="599.907" width="34" height="34">
    <properties>
+    <property name="angularDamping" value="90"/>
     <property name="bodyType" value="DynamicBody"/>
-    <property name="density" value="20"/>
-    <property name="friction" value="1.2"/>
+    <property name="categoryBits" value="2"/>
+    <property name="density" value="1"/>
     <property name="linearDamping" value="0"/>
    </properties>
    <ellipse/>

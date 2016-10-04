@@ -8,10 +8,19 @@ public class SonicBoom extends Game {
 	// Virtual size for game
 	public static final int V_WIDTH = 288;
 	public static final int V_HEIGHT = 216;
-	
-	// Pixel per Meter
-	public static final float PPM = 100; 
 
+	// Pixel per Meter
+	public static final float PPM = 100;
+
+	// Fixture Mask BIT
+	public static final short NOTHING_BIT = 0;
+	public static final short GROUND_BIT = 1;
+	public static final short PLAYER_BIT = 2;
+	public static final short RING_BIT = 4;
+	public static final short DESTROYED_BIT = 8;
+	public static final short OBJECT_BIT = 16;
+
+	// used by all screens
 	public SpriteBatch batch;
 
 	@Override
@@ -24,5 +33,10 @@ public class SonicBoom extends Game {
 	@Override
 	public void render() {
 		super.render();
+	}
+
+	@Override
+	public void dispose() {
+		batch.dispose();
 	}
 }

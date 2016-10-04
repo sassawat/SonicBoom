@@ -24,8 +24,10 @@ public class MenuScreen implements Screen {
 	}
 
 	public void handleInput() {
-		if (Gdx.input.isTouched())
+		if (Gdx.input.isTouched()) {
 			game.setScreen(new GameScreen(game));
+			dispose();
+		}
 	}
 
 	@Override
@@ -73,8 +75,7 @@ public class MenuScreen implements Screen {
 
 	@Override
 	public void dispose() {
-		// TODO Auto-generated method stub
-
+		img.dispose();
 	}
 
 }
