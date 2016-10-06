@@ -250,13 +250,12 @@
  <objectgroup name="BalconyGround"/>
  <objectgroup name="Platforms"/>
  <objectgroup name="Player">
-  <object id="12" name="player" type="object" x="47.8433" y="599.907" width="34" height="34">
+  <object id="12" name="player" type="object" x="47.8433" y="599.907" width="26" height="26">
    <properties>
     <property name="angularDamping" value="90"/>
     <property name="bodyType" value="DynamicBody"/>
     <property name="categoryBits" value="2"/>
     <property name="density" value="1"/>
-    <property name="linearDamping" value="0"/>
    </properties>
    <ellipse/>
   </object>

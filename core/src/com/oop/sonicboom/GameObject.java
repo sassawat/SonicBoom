@@ -12,8 +12,10 @@ import com.badlogic.gdx.utils.Disposable;
 public class GameObject implements Disposable {
 
 	private GameScreen game;
+	
 	private Array<Ring> rings;
 	private Animation ringAnimation;
+	private Texture ringTexture;
 
 	public GameObject(GameScreen game) {
 		this.game = game;
@@ -27,13 +29,13 @@ public class GameObject implements Disposable {
 		rings = new Array<Ring>();
 
 		// create ring Animation
-		Texture texture = new Texture("Sprites/ring.gif");
+		ringTexture = new Texture("Sprites/ring.gif");
 
 		Array<TextureRegion> frames = new Array<TextureRegion>();
-		frames.add(new TextureRegion(texture, 0, 0, 16, 16));
-		frames.add(new TextureRegion(texture, 22, 0, 16, 16));
-		frames.add(new TextureRegion(texture, 0, 22, 16, 16));
-		frames.add(new TextureRegion(texture, 22, 22, 16, 16));
+		frames.add(new TextureRegion(ringTexture, 0, 0, 16, 16));
+		frames.add(new TextureRegion(ringTexture, 22, 0, 16, 16));
+		frames.add(new TextureRegion(ringTexture, 0, 22, 16, 16));
+		frames.add(new TextureRegion(ringTexture, 22, 22, 16, 16));
 		ringAnimation = new Animation(0.2f, frames);
 		frames.clear();
 
@@ -67,7 +69,6 @@ public class GameObject implements Disposable {
 
 	@Override
 	public void dispose() {
-		// TODO Auto-generated method stub
-
+		ringTexture.dispose();
 	}
 }

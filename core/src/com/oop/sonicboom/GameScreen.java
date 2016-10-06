@@ -60,6 +60,8 @@ public class GameScreen implements Screen {
 	// Player
 	Player player;
 
+	PlayerInputProcessor playerInputProcessor;
+
 	// Game Object
 	GameObject gameObject;
 
@@ -69,8 +71,7 @@ public class GameScreen implements Screen {
 		// create cam used to follow player through cam world
 		gameCam = new OrthographicCamera();
 
-		// create a FitViewport to maintain virtual aspect ratio despite screen
-		// size
+		// create a StretchViewport
 		gamePort = new StretchViewport(SonicBoom.V_WIDTH / SonicBoom.PPM, SonicBoom.V_HEIGHT / SonicBoom.PPM, gameCam);
 
 		// Load map and setup our map renderer
@@ -109,9 +110,13 @@ public class GameScreen implements Screen {
 		debug = false;
 
 		// create Sonic!
-		player = new Sonic(world, this);
+		player = new Sonic(this);
 
-		// create item such ring
+		// create PlayerInputProcessor
+		playerInputProcessor = new PlayerInputProcessor(player);
+		Gdx.input.setInputProcessor(playerInputProcessor);
+
+		// create game object
 		gameObject = new GameObject(this);
 	}
 
@@ -176,20 +181,20 @@ public class GameScreen implements Screen {
 		if (Gdx.input.isKeyPressed(Keys.ESCAPE)) {
 			game.setScreen(new MenuScreen(game));
 		}
-
-		// player input
-		player.handleInput(delta);
 	}
 
 	public void update(float delta) {
+		// world callback time step
 		world.step(1 / 60f, 8, 3);
 
+		// update plater and game object
 		player.update(delta);
 		gameObject.update(delta);
 
+		// update cam position
 		gameCam.position.x = player.body.getWorldCenter().x;
 		gameCam.position.y = player.body.getWorldCenter().y;
-
+		// if cam out of map
 		if (gameCam.position.x - SonicBoom.V_WIDTH / 2 / SonicBoom.PPM < 0)
 			gameCam.position.x = SonicBoom.V_WIDTH / 2 / SonicBoom.PPM;
 
@@ -210,23 +215,30 @@ public class GameScreen implements Screen {
 
 	public void renderWorld(float delta) {
 
+		// draw static background
 		game.batch.setProjectionMatrix(bgCam.combined);
 		game.batch.begin();
 		game.batch.draw(bg, 0, 0, SonicBoom.V_WIDTH, SonicBoom.V_HEIGHT);
 		game.batch.end();
 
+		// darw back layer of map
 		renderer.render(backLayer);
 
+		// draw player and game object
 		game.batch.setProjectionMatrix(gameCam.combined);
 		game.batch.begin();
 		player.draw(game.batch);
 		gameObject.draw(game.batch);
 		game.batch.end();
 
+		// draw foregraound of map
 		renderer.render(foreLayer);
 
+		// debug
 		if (debug)
 			b2dr.render(world, gameCam.combined);
+
+		// draw HUD
 		hud.render();
 	}
 
