@@ -142,9 +142,9 @@ public class Sonic extends Player {
 
 	private void updateMotion() {
 
-		float spd = body.getLinearVelocity().x;
+		Vector2 spd = body.getLinearVelocity();
 
-		if (isSpdDown(spd) && spinning && (spd <= 2f && spd >= -2f)) {
+		if (isSpdDown(spd.x) && spinning && (spd.x <= 2f && spd.x >= -2f) && (spd.y <= 2f && spd.y >= -2f)) {
 			spinning = false;
 		}
 
@@ -152,13 +152,13 @@ public class Sonic extends Player {
 			body.setActive(false);
 		}
 
-		if (moveRight && (spd <= MAX_NORM_SPD || spinning && spd <= MAX_SPIN_SPD)) {
+		if (moveRight && (spd.x <= MAX_NORM_SPD || spinning && spd.x <= MAX_SPIN_SPD)) {
 			body.applyLinearImpulse(new Vector2(0.002f, 0), body.getWorldCenter(), true);
 			body.applyTorque(-5f, true);
 
 			faceRight = true;
 		}
-		if (moveLeft && (spd >= -MAX_NORM_SPD || spinning && spd >= -MAX_SPIN_SPD)) {
+		if (moveLeft && (spd.x >= -MAX_NORM_SPD || spinning && spd.x >= -MAX_SPIN_SPD)) {
 			body.applyLinearImpulse(new Vector2(-0.002f, 0), body.getWorldCenter(), true);
 			body.applyTorque(5f, true);
 
