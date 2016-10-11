@@ -152,13 +152,13 @@ public class Sonic extends Player {
 			body.setActive(false);
 		}
 
-		if (moveRight && (spd.x <= MAX_NORM_SPD || spinning && spd.x <= MAX_SPIN_SPD)) {
+		if (moveRight && (spd.x <= MAX_SPIN_SPD && spinning || spd.x <= MAX_NORM_SPD)) {
 			body.applyLinearImpulse(new Vector2(0.002f, 0), body.getWorldCenter(), true);
 			body.applyTorque(-5f, true);
 
 			faceRight = true;
 		}
-		if (moveLeft && (spd.x >= -MAX_NORM_SPD || spinning && spd.x >= -MAX_SPIN_SPD)) {
+		if (moveLeft && (spd.x >= -MAX_SPIN_SPD && spinning || spd.x >= -MAX_NORM_SPD)) {
 			body.applyLinearImpulse(new Vector2(-0.002f, 0), body.getWorldCenter(), true);
 			body.applyTorque(5f, true);
 

@@ -76,7 +76,7 @@ public class GameScreen implements Screen {
 
 		// Load map and setup our map renderer
 		maploader = new TmxMapLoader();
-		map = maploader.load("Maps/Neo_Green_Hill_1.tmx");
+		map = maploader.load("Maps/testMap/testMap.tmx");
 		renderer = new OrthogonalTiledMapRenderer(map, 1 / SonicBoom.PPM);
 		mapProperties = map.getProperties();
 		mapWidth = mapProperties.get("width", Integer.class);

@@ -20,6 +20,7 @@ public abstract class Player extends Sprite implements Disposable {
 	protected boolean spinCharged;
 	protected boolean spinning;
 	protected boolean spinJump;
+	protected boolean loop;
 
 	public Player(GameScreen game) {
 		this.game = game;
@@ -27,6 +28,10 @@ public abstract class Player extends Sprite implements Disposable {
 		body = game.parser.getBodies().get("player");
 		fixture = game.parser.getFixtures().get("player");
 		fixture.setUserData(this);
+	}
+	
+	public void switchLoop(){
+		loop = loop ? false : true;
 	}
 
 	abstract public void update(float delta);

@@ -1,23 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="40" height="15" tilewidth="96" tileheight="96" nextobjectid="100">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="60" height="15" tilewidth="96" tileheight="96" nextobjectid="142">
  <tileset firstgid="1" name="Neo_Green_Hill_Act_1_Tile_Sheet" tilewidth="96" tileheight="96" tilecount="180" columns="20">
   <image source="Neo_Green_Hill_Act_1_Tile_Sheet.png" width="1920" height="864"/>
  </tileset>
- <layer name="background" width="40" height="15">
+ <layer name="background" width="60" height="15">
   <data encoding="base64" compression="zlib">
-   eJxjYBgFo2AU0BoYD7QDCAD3gXYAiWA0PEfBKKAOCCFADzSIJEAPZgAAbwkDqQ==
+   eJxjYBgFo2AUjIKRBYwH2gF0Bu4D7YABBqPxPQpGwSgYjiCEAB2Og2bAIW6MQxxd30CBSDJpXPrdcYij6xsJAABP8wmj
   </data>
  </layer>
- <layer name="midground" width="40" height="15">
+ <layer name="midground" width="60" height="15">
   <data encoding="base64" compression="zlib">
-   eJzt0G0KgjAcgHHP0SHChLIyy6D60AuElzBvYCfoHvUx84w9wQYxcEJtvoB/+LEPY9vDHKeffro/Q6HJcTESXMGz/OYYE/iYYoY5AiwQYokVIqzFmY8NttghVu419Z/7CgcccSrZP2OAW0mn7b4qsk8y3Wm6z3Snrb7vzgQXpA306dpUGa4t7vulse4+2XjHo4a+5x9yvFBo1jfYS0rN
+   eJzt1EkKwjAARuGcw0NIFZxnUBcOIC51LdUb6AncewRdOpzRJ6QgxSbE1Bi0P3x0UVr6WqgQ2bJl+/flpV9agIIUSMWvPpH5SiijgipqqKOBJlpoo4MuevKahz4GGGIeu6+v33ukMcYE04TzM+SwF6+7fZuuVyfqjfjenXav792f6n3uDrHGxlGTara9qta4LXYOmlT/Spe9LpuT5ro3aj7ilMLzL7A0YNt7tnDBFbc3jweshNm7vgO8glY/
   </data>
  </layer>
- <layer name="foreground" width="40" height="15">
+ <layer name="foreground" width="60" height="15">
   <data encoding="base64" compression="zlib">
-   eJxjYBgFo2DoACYopjdgJUKMDYjZgZgDymZDk+ehgbtggB+LmAAaXxCPfgkglqSec6gOpIBYGk2MluFJKRhq4ckMxCwD5BZiAR8QKwy0IwiAUTdSBwxmN2oAsSYQawGxNhDrQPm6WNQCAKTdAys=
+   eJxjYBgFo2AUjBTABMVDHbASIcYGxOxAzAFls6HJ89DAXbQC/FjEBND4gnj0SwCxJPWcM+iBFBBLo4kNpfimFIz0+GYGYpYBcstAAT4gVhhoR9AZjPqZNmCwlZW09vNgKis1gFgTiLWAWBuIdaB8XTrYDQBJoANQ
   </data>
  </layer>
+ <objectgroup name="MapLimit">
+  <object id="2" name="LimitLine" type="object" x="0" y="0">
+   <polyline points="0,0 0,1440 5758,1440 5758,0 0,0"/>
+  </object>
+ </objectgroup>
  <objectgroup name="Ground">
   <object id="3" name="ground" type="object" x="1.66667" y="650.333">
    <properties>
@@ -31,7 +36,7 @@
    </properties>
   </object>
   <object id="5" x="1604" y="654" height="0.333333"/>
-  <object id="6" name="ground" type="object" x="2909.5" y="1368.5" width="930.5" height="8.75">
+  <object id="6" name="ground" type="object" x="2909.5" y="1368.5" width="1833.5" height="8.75">
    <properties>
     <property name="categoryBits" value="1"/>
    </properties>
@@ -44,15 +49,31 @@
   </object>
   <object id="9" name="ground" type="object" x="2112.25" y="650" width="191.25" height="22"/>
   <object id="10" name="ground" type="object" x="1728.18" y="458" width="191.636" height="21.8182"/>
- </objectgroup>
- <objectgroup name="MapLimit">
-  <object id="2" name="LimitLine" type="object" x="0" y="0">
-   <polyline points="0,0 0,1440 3840,1440 3840,0 0,0"/>
+  <object id="101" x="214" y="575.5"/>
+  <object id="103" name="ground" type="object" x="4704.25" y="1322.13" width="1054.71" height="8.75">
+   <properties>
+    <property name="categoryBits" value="1"/>
+   </properties>
+  </object>
+  <object id="104" name="ground" type="object" x="4510" y="1369.5">
+   <properties>
+    <property name="categoryBits" value="1"/>
+   </properties>
+   <polyline points="0,0 194.313,-47.3125"/>
+  </object>
+  <object id="94" name="BalconyGround" type="object" x="1055.7" y="553.273" width="480.121" height="7.45455">
+   <properties>
+    <property name="categoryBits" value="32"/>
+   </properties>
+  </object>
+  <object id="96" name="BalconyGround" type="object" x="1153.27" y="489.606" width="188.121" height="7.45455">
+   <properties>
+    <property name="bodyType" value="kinematicBody"/>
+    <property name="categoryBits" value="32"/>
+   </properties>
   </object>
  </objectgroup>
- <objectgroup name="enLoop"/>
- <objectgroup name="deLoop"/>
- <objectgroup name="Rail"/>
+ <objectgroup name="Platforms"/>
  <objectgroup name="Rings">
   <object id="28" name="ring" type="object" x="251.333" y="569" width="16" height="16">
    <properties>
@@ -235,22 +256,93 @@
    </properties>
   </object>
  </objectgroup>
- <objectgroup name="BalconyGround">
-  <object id="94" name="BalconyGround" type="object" x="1055.7" y="553.273" width="480.121" height="7.45455">
+ <objectgroup name="Player"/>
+ <objectgroup name="Loop">
+  <object id="106" name="loopR" type="object" x="5184.13" y="1324.25">
    <properties>
-    <property name="categoryBits" value="32"/>
+    <property name="categoryBits" value="128"/>
+   </properties>
+   <polyline points="0,0 20.625,-2.75 39.625,-11.625 56.375,-24.25 68.375,-41.75 75,-60.875 76.375,-76.125 75,-92.375 68.5,-110.875 57.875,-125.625 48.25,-135.625 30.375,-146.25 15.5,-151.625 -0.25,-153.125"/>
+  </object>
+  <object id="108" name="loopRSensor" type="fixture" x="5084.33" y="1151.67" width="9.66667" height="227">
+   <properties>
+    <property name="body" value="loopR"/>
+    <property name="categoryBits" value="256"/>
+    <property name="isSensor" value="true"/>
    </properties>
   </object>
-  <object id="96" name="BalconyGround" type="object" x="1153.27" y="489.606" width="188.121" height="7.45455">
+  <object id="112" name="loopL" type="object" x="5107.46" y="1324.25">
    <properties>
-    <property name="bodyType" value="kinematicBody"/>
-    <property name="categoryBits" value="32"/>
+    <property name="categoryBits" value="512"/>
+   </properties>
+   <polyline points="70.375,21.625 61.5,15 37.375,-3.625 8.875,-32.125 3,-45.75 -0.125,-60.375 -0.25,-76.125 1.125,-92.375 7.625,-110.875 18.25,-125.625 27.875,-135.625 45.75,-146.25 60.625,-151.625 76.375,-153.125"/>
+  </object>
+  <object id="113" name="loopLSensor" type="fixture" x="5273.83" y="1151.17" width="9.66667" height="227">
+   <properties>
+    <property name="body" value="loopL"/>
+    <property name="categoryBits" value="1024"/>
+    <property name="isSensor" value="true"/>
    </properties>
   </object>
- </objectgroup>
- <objectgroup name="Platforms"/>
- <objectgroup name="Player">
-  <object id="12" name="player" type="object" x="47.8433" y="599.907" width="26" height="26">
+  <object id="129" name="loopL" type="object" x="1747.8" y="652.83">
+   <properties>
+    <property name="categoryBits" value="512"/>
+   </properties>
+   <polyline points="70.375,21.625 61.5,15 37.375,-3.625 8.875,-32.125 3,-45.75 -0.125,-60.375 -0.25,-76.125 1.125,-92.375 7.625,-110.875 18.25,-125.625 27.875,-135.625 45.75,-146.25 60.625,-151.625 76.375,-153.125"/>
+  </object>
+  <object id="130" name="switchLoopSensor" type="object" x="1818" y="480.129" width="11.4545" height="24.3333">
+   <properties>
+    <property name="categoryBits" value="64"/>
+    <property name="isSensor" value="true"/>
+   </properties>
+  </object>
+  <object id="131" name="loopRSensor" type="fixture" x="1724.67" y="480.25" width="9.66667" height="154.5">
+   <properties>
+    <property name="body" value="loopR"/>
+    <property name="categoryBits" value="256"/>
+    <property name="isSensor" value="true"/>
+   </properties>
+  </object>
+  <object id="132" name="loopR" type="object" x="1824.47" y="652.83">
+   <properties>
+    <property name="categoryBits" value="128"/>
+   </properties>
+   <polyline points="-43.6364,0 7.17045,0.159091 39.625,-11.625 56.375,-24.25 68.375,-41.75 75,-60.875 76.375,-76.125 75,-92.375 68.5,-110.875 57.875,-125.625 48.25,-135.625 30.375,-146.25 15.5,-151.625 -0.25,-153.125"/>
+  </object>
+  <object id="133" name="loopLSensor" type="fixture" x="1914.17" y="479.75" width="9.66667" height="247">
+   <properties>
+    <property name="body" value="loopL"/>
+    <property name="categoryBits" value="1024"/>
+    <property name="isSensor" value="true"/>
+   </properties>
+  </object>
+  <object id="134" name="loopL" type="object" x="2131.63" y="844.58">
+   <properties>
+    <property name="categoryBits" value="512"/>
+   </properties>
+   <polyline points="70.375,21.625 61.5,15 37.375,-3.625 8.875,-32.125 3,-45.75 -0.125,-60.375 -0.25,-76.125 1.125,-92.375 7.625,-110.875 18.25,-125.625 27.875,-135.625 45.75,-146.25 60.625,-151.625 76.375,-153.125"/>
+  </object>
+  <object id="136" name="loopRSensor" type="fixture" x="2108.5" y="672" width="9.66667" height="154.5">
+   <properties>
+    <property name="body" value="loopR"/>
+    <property name="categoryBits" value="256"/>
+    <property name="isSensor" value="true"/>
+   </properties>
+  </object>
+  <object id="137" name="loopR" type="object" x="2208.3" y="844.58">
+   <properties>
+    <property name="categoryBits" value="128"/>
+   </properties>
+   <polyline points="-48,0.181818 8.07955,-0.0227273 39.625,-11.625 56.375,-24.25 68.375,-41.75 75,-60.875 76.375,-76.125 75,-92.375 68.5,-110.875 57.875,-125.625 48.25,-135.625 30.375,-146.25 15.5,-151.625 -0.25,-153.125"/>
+  </object>
+  <object id="138" name="loopLSensor" type="fixture" x="2298" y="671.5" width="9.66667" height="248.5">
+   <properties>
+    <property name="body" value="loopL"/>
+    <property name="categoryBits" value="1024"/>
+    <property name="isSensor" value="true"/>
+   </properties>
+  </object>
+  <object id="139" name="player" type="object" x="55.5" y="598" width="26" height="26">
    <properties>
     <property name="angularDamping" value="90"/>
     <property name="bodyType" value="DynamicBody"/>
@@ -258,6 +350,18 @@
     <property name="density" value="1"/>
    </properties>
    <ellipse/>
+  </object>
+  <object id="140" name="switchLoopSensor" type="object" x="2201.91" y="671.985" width="11.4545" height="25">
+   <properties>
+    <property name="categoryBits" value="64"/>
+    <property name="isSensor" value="true"/>
+   </properties>
+  </object>
+  <object id="141" name="switchLoopSensor" type="object" x="5178.27" y="1151.67" width="11.4545" height="25.3334">
+   <properties>
+    <property name="categoryBits" value="64"/>
+    <property name="isSensor" value="true"/>
+   </properties>
   </object>
  </objectgroup>
 </map>

@@ -20,6 +20,11 @@ public class SonicBoom extends Game {
 	public static final short DESTROYED_BIT = 8;
 	public static final short OBJECT_BIT = 16;
 	public static final short PLATFORM_BIT = 32;
+	public static final short LOOP_SWITCH_BIT = 64;
+	public static final short LOOP_R_BIT = 128;
+	public static final short LOOP_R_SENSOR_BIT = 256;
+	public static final short LOOP_L_BIT = 512;
+	public static final short LOOP_L_SENSOR_BIT = 1024;
 
 	// used by all screens
 	public SpriteBatch batch;

@@ -35,6 +35,27 @@ public class WorldContactListener implements ContactListener {
 				((Ring) fixA.getUserData()).hit();
 			}
 			break;
+		case SonicBoom.PLAYER_BIT | SonicBoom.LOOP_SWITCH_BIT:
+			if (fixA.getFilterData().categoryBits == SonicBoom.PLAYER_BIT) {
+				((Player) fixA.getUserData()).switchLoop();
+			} else {
+				((Player) fixB.getUserData()).switchLoop();
+			}
+			break;
+		case SonicBoom.PLAYER_BIT | SonicBoom.LOOP_R_SENSOR_BIT:
+			if (fixA.getFilterData().categoryBits == SonicBoom.PLAYER_BIT) {
+				((Player) fixA.getUserData()).loop = true;
+			} else {
+				((Player) fixB.getUserData()).loop = true;
+			}
+			break;
+		case SonicBoom.PLAYER_BIT | SonicBoom.LOOP_L_SENSOR_BIT:
+			if (fixA.getFilterData().categoryBits == SonicBoom.PLAYER_BIT) {
+				((Player) fixA.getUserData()).loop = false;
+			} else {
+				((Player) fixB.getUserData()).loop = false;
+			}
+			break;
 		}
 
 	}
@@ -104,6 +125,30 @@ public class WorldContactListener implements ContactListener {
 
 			// no points are moving downward, contact should not be solid
 			contact.setEnabled(false);
+			break;
+		case SonicBoom.PLAYER_BIT | SonicBoom.LOOP_R_BIT:
+			if (fixA.getFilterData().categoryBits == SonicBoom.PLAYER_BIT) {
+				if (((Player) fixA.getUserData()).loop == false) {
+					contact.setEnabled(false);
+				}
+
+			} else {
+				if (((Player) fixB.getUserData()).loop == false) {
+					contact.setEnabled(false);
+				}
+			}
+			break;
+		case SonicBoom.PLAYER_BIT | SonicBoom.LOOP_L_BIT:
+			if (fixA.getFilterData().categoryBits == SonicBoom.PLAYER_BIT) {
+				if (((Player) fixA.getUserData()).loop == true) {
+					contact.setEnabled(false);
+				}
+
+			} else {
+				if (((Player) fixB.getUserData()).loop == true) {
+					contact.setEnabled(false);
+				}
+			}
 			break;
 		}
 
