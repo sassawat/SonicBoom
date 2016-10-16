@@ -9,7 +9,7 @@ import com.badlogic.gdx.utils.Array;
 public class Sonic extends Player {
 
 	public final float MAX_NORM_SPD = 4f;
-	public final float MAX_SPIN_SPD = 4.5f;
+	public final float MAX_SPIN_SPD = 5.75f;
 
 	private enum State {
 		IDLE, WALKING, RUNNING, SPINNING, SPINCHARGE

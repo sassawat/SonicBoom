@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="orthogonal" renderorder="right-down" width="150" height="15" tilewidth="96" tileheight="96" nextobjectid="58">
  <tileset firstgid="1" name="Neo_Green_Hill_Act_1_Tile_Sheet" tilewidth="96" tileheight="96" tilecount="180" columns="20">
-  <image source="testMap/Neo_Green_Hill_Act_1_Tile_Sheet.png" width="1920" height="864"/>
+  <image source="Neo_Green_Hill_Act_1_Tile_Sheet.png" width="1920" height="864"/>
  </tileset>
  <layer name="background" width="150" height="15">
   <data encoding="csv">

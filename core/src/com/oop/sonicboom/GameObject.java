@@ -1,74 +1,102 @@
 package com.oop.sonicboom;
 
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.objects.TextureMapObject;
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.Fixture;
-import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.Disposable;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.badlogic.gdx.physics.box2d.World;
 
-public class GameObject implements Disposable {
+public abstract class GameObject {
 
-	private GameScreen game;
-	
-	private Array<Ring> rings;
-	private Animation ringAnimation;
-	private Texture ringTexture;
+	protected GameScreen game;
+	protected World world;
+	protected MapObject object;
 
-	public GameObject(GameScreen game) {
+	protected Body body;
+
+	protected float rotation;
+	protected float x;
+	protected float y;
+	protected float width;
+	protected float height;
+
+	public GameObject(GameScreen game, MapObject object) {
 		this.game = game;
-		game.getWorld();
+		this.world = game.getWorld();
+		this.object = object;
 
-		createRing();
+		defineObject();
+		customizeObject();
 	}
 
-	public void createRing() {
+	private void defineObject() {
+		TextureMapObject textureMapObject = (TextureMapObject) object;
 
-		rings = new Array<Ring>();
+		rotation = textureMapObject.getRotation();
 
-		// create ring Animation
-		ringTexture = new Texture("Sprites/ring.gif");
+		x = textureMapObject.getX() / SonicBoom.PPM;
+		y = textureMapObject.getY() / SonicBoom.PPM;
 
-		Array<TextureRegion> frames = new Array<TextureRegion>();
-		frames.add(new TextureRegion(ringTexture, 0, 0, 16, 16));
-		frames.add(new TextureRegion(ringTexture, 22, 0, 16, 16));
-		frames.add(new TextureRegion(ringTexture, 0, 22, 16, 16));
-		frames.add(new TextureRegion(ringTexture, 22, 22, 16, 16));
-		ringAnimation = new Animation(0.2f, frames);
-		frames.clear();
+		width = textureMapObject.getProperties().get("width", Float.class).floatValue() / SonicBoom.PPM;
+		height = textureMapObject.getProperties().get("height", Float.class).floatValue() / SonicBoom.PPM;
 
-		// find body for item
-		String key = "ring";
-		int n = 0;
+		BodyDef bdef = new BodyDef();
+		FixtureDef fdef = new FixtureDef();
 
-		while (game.parser.getBodies().get(n == 0 ? key : key + n) != null) {
-			String tmpKey = n == 0 ? key : key + n;
-			Body tmpBody = game.parser.getBodies().get(tmpKey);
-			Fixture tmpFixture = game.parser.getFixtures().get(tmpKey);
-			
-			rings.add(new Ring(game, tmpBody, tmpFixture, ringAnimation));
-			
-			n++;
-		}
+		body = world.createBody(bdef);
 
+		applyTiledLocationToBody(body, x, y, width, height, rotation);
+
+		PolygonShape shape = new PolygonShape();
+		shape.setAsBox(width / 2, height / 2);
+		fdef.shape = shape;
+
+		body.createFixture(fdef);
 	}
 
-	public void update(float delta) {
-		for (Ring ring : rings) {
-			ring.update(delta);
-		}
+	private void applyTiledLocationToBody(Body body, float x, float y, float width, float height, float rotation) {
+		// set body position taking into consideration the center position
+		body.setTransform(x + width / 2, y + height / 2, 0);
+
+		// bottom left position in local coordinates
+		Vector2 localPosition = new Vector2(-width / 2, -height / 2);
+
+		// save world position before rotation
+		Vector2 positionBefore = body.getWorldPoint(localPosition).cpy();
+
+		// calculate angle in radians
+		float angle = -rotation * MathUtils.degreesToRadians;
+
+		// set new angle
+		body.setTransform(body.getPosition(), angle);
+
+		// save world position after rotation
+		Vector2 positionAfter = body.getWorldPoint(localPosition).cpy();
+
+		// adjust position with the difference (before - after)
+		// so that the bottom left position remains unchanged
+		Vector2 newPosition = body.getPosition().add(positionBefore).sub(positionAfter);
+		body.setTransform(newPosition, angle);
 	}
 
 	public void draw(Batch batch) {
-		for (Ring ring : rings) {
-			ring.draw(batch);
-		}
+		TextureMapObject textureObject = (TextureMapObject) object;
+		batch.draw(textureObject.getTextureRegion(), textureObject.getX() / SonicBoom.PPM,
+				textureObject.getY() / SonicBoom.PPM, textureObject.getOriginX() / SonicBoom.PPM,
+				textureObject.getOriginY() / SonicBoom.PPM,
+				textureObject.getTextureRegion().getRegionWidth() / SonicBoom.PPM,
+				textureObject.getTextureRegion().getRegionHeight() / SonicBoom.PPM, textureObject.getScaleX(),
+				textureObject.getScaleY(), -textureObject.getRotation());
+
 	}
 
-	@Override
-	public void dispose() {
-		ringTexture.dispose();
-	}
+	public abstract void customizeObject();
+
+	public abstract void hit();
+
 }

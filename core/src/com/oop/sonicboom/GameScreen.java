@@ -63,7 +63,7 @@ public class GameScreen implements Screen {
 	PlayerInputProcessor playerInputProcessor;
 
 	// Game Object
-	GameObject gameObject;
+	GameObjects gameObject;
 
 	public GameScreen(SonicBoom game) {
 		this.game = game;
@@ -76,7 +76,7 @@ public class GameScreen implements Screen {
 
 		// Load map and setup our map renderer
 		maploader = new TmxMapLoader();
-		map = maploader.load("Maps/testMap/testMap.tmx");
+		map = maploader.load("Maps/testMap.tmx");
 		renderer = new OrthogonalTiledMapRenderer(map, 1 / SonicBoom.PPM);
 		mapProperties = map.getProperties();
 		mapWidth = mapProperties.get("width", Integer.class);
@@ -100,7 +100,7 @@ public class GameScreen implements Screen {
 		hud = new Hud();
 
 		// create background
-		bg = new Texture("Maps/testMap/bg.png");
+		bg = new Texture("Maps/bg.png");
 		bgCam = new OrthographicCamera(SonicBoom.V_WIDTH, SonicBoom.V_HEIGHT);
 		bgCam.position.set(SonicBoom.V_WIDTH / 2, SonicBoom.V_HEIGHT / 2, 0);
 
@@ -117,7 +117,7 @@ public class GameScreen implements Screen {
 		Gdx.input.setInputProcessor(playerInputProcessor);
 
 		// create game object
-		gameObject = new GameObject(this);
+		gameObject = new GameObjects(this);
 	}
 
 	@Override
