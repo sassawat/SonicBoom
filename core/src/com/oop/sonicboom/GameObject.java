@@ -19,6 +19,8 @@ public abstract class GameObject {
 
 	protected Body body;
 
+	protected TextureMapObject textureObject;
+
 	protected float rotation;
 	protected float x;
 	protected float y;
@@ -29,6 +31,8 @@ public abstract class GameObject {
 		this.game = game;
 		this.world = game.getWorld();
 		this.object = object;
+
+		this.textureObject = (TextureMapObject) object;
 
 		defineObject();
 		customizeObject();
@@ -85,9 +89,7 @@ public abstract class GameObject {
 	}
 
 	public void draw(Batch batch) {
-		TextureMapObject textureObject = (TextureMapObject) object;
-		batch.draw(textureObject.getTextureRegion(), textureObject.getX() / SonicBoom.PPM,
-				textureObject.getY() / SonicBoom.PPM, textureObject.getOriginX() / SonicBoom.PPM,
+		batch.draw(textureObject.getTextureRegion(), x, y, textureObject.getOriginX() / SonicBoom.PPM,
 				textureObject.getOriginY() / SonicBoom.PPM,
 				textureObject.getTextureRegion().getRegionWidth() / SonicBoom.PPM,
 				textureObject.getTextureRegion().getRegionHeight() / SonicBoom.PPM, textureObject.getScaleX(),
@@ -96,6 +98,8 @@ public abstract class GameObject {
 	}
 
 	public abstract void customizeObject();
+
+	public abstract void update(float delta);
 
 	public abstract void hit();
 

@@ -24,8 +24,17 @@ public class WorldContactListener implements ContactListener {
 		case SonicBoom.PLAYER_BIT | SonicBoom.PLATFORM_BIT:
 			if (fixA.getFilterData().categoryBits == SonicBoom.PLAYER_BIT) {
 				((Player) fixA.getUserData()).onGround = true;
+
+				if (((Object) fixB.getUserData()) instanceof GameObject) {
+					((GameObject) fixB.getUserData()).hit();
+				}
+
 			} else {
 				((Player) fixB.getUserData()).onGround = true;
+
+				if (((Object) fixA.getUserData()) instanceof GameObject) {
+					((GameObject) fixA.getUserData()).hit();
+				}
 			}
 			break;
 		case SonicBoom.PLAYER_BIT | SonicBoom.RING_BIT:

@@ -21,6 +21,8 @@ public class GameObjects implements Disposable {
 
 	private Array<Spike> spikes;
 	private Array<DashPanel> dashPanels;
+	private Array<Spring> springs;
+	private Array<Platform> platforms;
 
 	public GameObjects(GameScreen game) {
 		this.game = game;
@@ -28,6 +30,8 @@ public class GameObjects implements Disposable {
 		createRings();
 		createSpikes();
 		createDashPanels();
+		createSprings();
+		createPlatform();
 	}
 
 	public void createRings() {
@@ -65,8 +69,12 @@ public class GameObjects implements Disposable {
 		spikes = new Array<Spike>();
 
 		for (MapObject object : game.getMap().getLayers().get("GameObject").getObjects()) {
-			if (object instanceof TextureMapObject && object.getName().equals("spike")) {
-				spikes.add(new Spike(game, object));
+			try {
+				if (object instanceof TextureMapObject && object.getName().equals("spike")) {
+					spikes.add(new Spike(game, object));
+				}
+			} catch (NullPointerException e) {
+				// object has no name
 			}
 		}
 	}
@@ -75,8 +83,40 @@ public class GameObjects implements Disposable {
 		dashPanels = new Array<DashPanel>();
 
 		for (MapObject object : game.getMap().getLayers().get("GameObject").getObjects()) {
-			if (object instanceof TextureMapObject && object.getName().equals("dp")) {
-				dashPanels.add(new DashPanel(game, object));
+			try {
+				if (object instanceof TextureMapObject && object.getName().equals("dp")) {
+					dashPanels.add(new DashPanel(game, object));
+				}
+			} catch (NullPointerException e) {
+				// object has no name
+			}
+		}
+	}
+
+	public void createSprings() {
+		springs = new Array<Spring>();
+
+		for (MapObject object : game.getMap().getLayers().get("GameObject").getObjects()) {
+			try {
+				if (object instanceof TextureMapObject && object.getName().equals("spring")) {
+					springs.add(new Spring(game, object));
+				}
+			} catch (NullPointerException e) {
+				// object has no name
+			}
+		}
+	}
+
+	public void createPlatform() {
+		platforms = new Array<Platform>();
+
+		for (MapObject object : game.getMap().getLayers().get("GameObject").getObjects()) {
+			try {
+				if (object instanceof TextureMapObject && object.getName().equals("platform")) {
+					platforms.add(new Platform(game, object));
+				}
+			} catch (NullPointerException e) {
+				// object has no name
 			}
 		}
 	}
@@ -85,19 +125,40 @@ public class GameObjects implements Disposable {
 		for (Ring ring : rings) {
 			ring.update(delta);
 		}
+
+		for (Spring spring : springs) {
+			spring.update(delta);
+		}
+
+		for (Platform platform : platforms) {
+			platform.update(delta);
+		}
 	}
 
 	public void draw(Batch batch) {
+		// draw rings
 		for (Ring ring : rings) {
 			ring.draw(batch);
 		}
 
+		// draw spikes
 		for (Spike spike : spikes) {
 			spike.draw(batch);
 		}
 
+		// draw dash panel
 		for (DashPanel dashPanel : dashPanels) {
 			dashPanel.draw(batch);
+		}
+
+		// draw springs
+		for (Spring spring : springs) {
+			spring.draw(batch);
+		}
+
+		// draw platforms
+		for (Platform platform : platforms) {
+			platform.draw(batch);
 		}
 	}
 

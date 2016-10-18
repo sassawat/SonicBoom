@@ -227,8 +227,8 @@ public class GameScreen implements Screen {
 		// draw player and game object
 		game.batch.setProjectionMatrix(gameCam.combined);
 		game.batch.begin();
-		player.draw(game.batch);
 		gameObject.draw(game.batch);
+		player.draw(game.batch);
 		game.batch.end();
 
 		// draw foregraound of map
