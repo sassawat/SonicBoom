@@ -11,10 +11,6 @@ public class Sonic extends Player {
 	public final float MAX_NORM_SPD = 4f;
 	public final float MAX_SPIN_SPD = 5.75f;
 
-	private enum State {
-		IDLE, WALKING, RUNNING, SPINNING, SPINCHARGE
-	};
-
 	private State currentState;
 	private State previousState;
 
@@ -26,6 +22,8 @@ public class Sonic extends Player {
 	private Animation run;
 	private Animation spin;
 	private Animation charge;
+	private Animation jump;
+	private Animation crouching;
 
 	private Texture texture;
 
@@ -35,43 +33,51 @@ public class Sonic extends Player {
 		currentState = State.IDLE;
 		previousState = State.IDLE;
 		stateTimer = 0;
+		
+		faceRight = true;
 
-		texture = new Texture("Sprites/sonic.png");
+		texture = new Texture("Sprites/boss.png");
 
 		Array<TextureRegion> frames = new Array<TextureRegion>();
 
 		// get idle animation frames and add them to sonic Animation
-		for (int i = 1; i < 8; i++)
-			frames.add(new TextureRegion(texture, 5 + 36 * i, 10, 36, 34));
+		for (int i = 1; i < 5; i++)
+			frames.add(new TextureRegion(texture, 110 + 47 * i, 133, 45, 72));
 		idle = new Animation(0.2f, frames);
 		frames.clear();
 
-		// get walk animation frames and add them to sonic Animation
-		for (int i = 1; i < 6; i++)
-			frames.add(new TextureRegion(texture, 275 + 36 * i, 100, 37, 37));
+		// get walk and run animation frames and add them to sonic Animation
+		for (int i = 1; i < 5; i++)
+			frames.add(new TextureRegion(texture, 110 + 47 * i, 214, 45, 72));
 		walk = new Animation(0.2f, frames);
-		frames.clear();
-
-		// get run animation frames and add them to sonic Animation
-		for (int i = 1; i < 8; i++)
-			frames.add(new TextureRegion(texture, 39 * i, 144, 37, 36));
-		run = new Animation(0.12f, frames);
+		run = new Animation(0.1f, frames);
 		frames.clear();
 
 		// get spin animation frames and add them to sonic Animation
 		for (int i = 1; i < 4; i++)
-			frames.add(new TextureRegion(texture, 112 + (36 * i), 235, 32, 32));
-		spin = new Animation(0.1f, frames);
+			frames.add(new TextureRegion(texture, 525 + 51 * i, 619, 45, 74));
+		spin = new Animation(0.125f, frames);
 		frames.clear();
 
 		// get spin charge animation frames and add them to sonic Animation
-		for (int i = 1; i < 4; i++)
-			frames.add(new TextureRegion(texture, 853 + (36 * i), 190, 32, 32));
-		charge = new Animation(0.1f, frames);
+		frames.add(new TextureRegion(texture, 527, 620, 45, 74));
+		charge = new Animation(0, frames);
+		frames.clear();
+
+		// get jump animation frames and add them to sonic Animation
+		for (int i = 2; i < 5; i++)
+			frames.add(new TextureRegion(texture, 110 + 47 * i, 322, 45, 72));
+		jump = new Animation(0.2f, frames);
+		frames.clear();
+
+		// get crouch animation frames and add them to sonic Animation
+		for (int i = 7; i < 9; i++)
+			frames.add(new TextureRegion(texture, 110 + 45 * i, 322, 45, 72));
+		crouching = new Animation(0.2f, frames);
 		frames.clear();
 
 		// set area of sprite
-		setBounds(0, 0, 34 / SonicBoom.PPM, 34 / SonicBoom.PPM);
+		setBounds(0, 0, 50 / SonicBoom.PPM, 74 / SonicBoom.PPM);
 	}
 
 	@Override
@@ -80,7 +86,7 @@ public class Sonic extends Player {
 		updateMotion();
 
 		// set position of sprite and update frames
-		setPosition(body.getWorldCenter().x - getWidth() / 2, body.getWorldCenter().y - getHeight() / 2);
+		setPosition(body.getWorldCenter().x - getWidth() / 2, body.getWorldCenter().y - 18 / SonicBoom.PPM);
 		setRegion(getFrame(delta));
 		stateTimer += delta;
 
@@ -96,6 +102,12 @@ public class Sonic extends Player {
 		TextureRegion region;
 
 		switch (currentState) {
+		case CROUCHING:
+			region = crouching.getKeyFrame(stateTimer, true);
+			break;
+		case JUMPPING:
+			region = jump.getKeyFrame(stateTimer);
+			break;
 		case SPINCHARGE:
 			region = charge.getKeyFrame(stateTimer, true);
 			break;
@@ -114,9 +126,9 @@ public class Sonic extends Player {
 			break;
 		}
 
-		if (faceRight && !region.isFlipX()) {
+		if (!faceRight && !region.isFlipX()) {
 			region.flip(true, false);
-		} else if (!faceRight && region.isFlipX()) {
+		} else if (faceRight && region.isFlipX()) {
 			region.flip(true, false);
 		}
 
@@ -127,10 +139,14 @@ public class Sonic extends Player {
 	}
 
 	public State getState() {
-		if (spinCharged) {
+		if (spinJump) {
+			return State.JUMPPING;
+		} else if (spinCharged) {
 			return State.SPINCHARGE;
-		} else if (spinning || spinJump) {
+		} else if (spinning) {
 			return State.SPINNING;
+		} else if (crouch) {
+			return State.CROUCHING;
 		} else if (body.getLinearVelocity().x > 2f || body.getLinearVelocity().x < -2f) {
 			return State.RUNNING;
 		} else if (body.getLinearVelocity().x > 0.1f || body.getLinearVelocity().x < -0.1f) {
@@ -146,6 +162,12 @@ public class Sonic extends Player {
 
 		if (isSpdDown(spd.x) && spinning && (spd.x <= 2f && spd.x >= -2f) && (spd.y <= 2f && spd.y >= -2f)) {
 			spinning = false;
+		}
+
+		if (crouch) {
+			body.setLinearDamping(1);
+		} else {
+			body.setLinearDamping(0);
 		}
 
 		if (spinCharged) {

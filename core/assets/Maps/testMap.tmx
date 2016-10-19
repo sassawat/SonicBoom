@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="60" height="15" tilewidth="96" tileheight="96" nextobjectid="223">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="60" height="15" tilewidth="96" tileheight="96" nextobjectid="236">
  <tileset firstgid="1" name="Neo_Green_Hill_Act_1_Tile_Sheet" tilewidth="96" tileheight="96" tilecount="180" columns="20">
   <image source="Neo_Green_Hill_Act_1_Tile_Sheet.png" width="1920" height="864"/>
  </tileset>
@@ -30,7 +30,7 @@
  </layer>
  <layer name="midground" width="60" height="15">
   <data encoding="base64" compression="zlib">
-   eJzt1EkKwjAARuGcw0NIFZxnUBcOIC51LdUb6AncewRdOpzRJ6QgxSbE1Bi0P3x0UVr6WqgQ2bJl+/flpV9agIIUSMWvPpH5SiijgipqqKOBJlpoo4MuevKahz4GGGIeu6+v33ukMcYE04TzM+SwF6+7fZuuVyfqjfjenXav792f6n3uDrHGxlGTara9qta4LXYOmlT/Spe9LpuT5ro3aj7ilMLzL7A0YNt7tnDBFbc3jweshNm7vgO8glY/
+   eJzt1EsKgkAAh/E5R4cIi97voFr0gGhZa+lxgjpB+45Qyx5n7BNGCDHH0qah5g8/XIjip6AQdnZ2/76s9EtzkJMcKf/VJ3p9RZRQRgVV1FBHA0200EYHXXmNp4c+BpgF7mvq9x4qjDDG5Mn5KTLYi/Bu06bqVfF7faZ3p91reveneh+7l1hhrakpakl7o1qDtthpaIr6V+rs1dkctoLQ3+s3H3FKoWGORUybFHrPCVxwxe3N4wGuiP+evd47Lm1W0g==
   </data>
  </layer>
  <layer name="foreground" width="60" height="15">
@@ -89,6 +89,11 @@
    <properties>
     <property name="bodyType" value="kinematicBody"/>
     <property name="categoryBits" value="32"/>
+   </properties>
+  </object>
+  <object id="223" name="ground" type="object" x="5664" y="1152" width="96" height="192">
+   <properties>
+    <property name="categoryBits" value="1"/>
    </properties>
   </object>
  </objectgroup>
@@ -418,22 +423,19 @@
  </objectgroup>
  <objectgroup name="GameObject">
   <object id="167" name="spike" gid="181" x="494" y="649.5" width="31" height="26" rotation="-90"/>
-  <object id="168" name="spike" gid="181" x="1289" y="491.5" width="31" height="26" rotation="-360"/>
-  <object id="170" name="dp" gid="182" x="92.25" y="649" width="32" height="14"/>
+  <object id="168" name="spike" gid="181" x="1887.67" y="458.833" width="31" height="26" rotation="-360"/>
+  <object id="170" name="dp" gid="182" x="903.917" y="671.667" width="32" height="14"/>
   <object id="173" name="dp" gid="182" x="4883" y="1323" width="32" height="14"/>
   <object id="174" name="dp" gid="182" x="3265.5" y="1372" width="32" height="14"/>
   <object id="175" name="dp" gid="182" x="4335.67" y="1371.33" width="32" height="14"/>
   <object id="177" name="spring" gid="183" x="-0.237902" y="650.404" width="21" height="28" rotation="-0.389565"/>
-  <object id="187" name="spring" gid="183" x="827.167" y="670.667" width="21" height="28"/>
-  <object id="188" name="spring" gid="183" x="1008.83" y="642.333" width="21" height="28" rotation="-180"/>
   <object id="198" name="platform" gid="186" x="3768.67" y="1323.25" width="32" height="19"/>
   <object id="199" name="platform" gid="186" x="3701.33" y="1321.75" width="32" height="19"/>
   <object id="200" name="platform" gid="186" x="3836" y="1324.58" width="32" height="19"/>
   <object id="202" name="platform" gid="186" x="4117.34" y="1330.58" width="32" height="19"/>
   <object id="203" name="platform" gid="186" x="4050" y="1329.08" width="32" height="19"/>
   <object id="204" name="platform" gid="186" x="4184.67" y="1331.91" width="32" height="19"/>
-  <object id="218" name="spring" gid="183" x="5760.18" y="1296.5" width="21" height="28" rotation="-180"/>
-  <object id="219" name="player" type="object" x="143.5" y="554" width="26" height="26">
+  <object id="219" name="player" type="object" x="70.1667" y="610.667" width="26" height="26">
    <properties>
     <property name="angularDamping" value="90"/>
     <property name="bodyType" value="DynamicBody"/>
@@ -443,6 +445,13 @@
    </properties>
    <ellipse/>
   </object>
-  <object id="222" name="dp" gid="182" x="1651.25" y="588.019" width="32" height="14" rotation="27.9468"/>
+  <object id="225" name="spring" gid="183" x="5675.24" y="1319.79" width="21" height="28" rotation="240"/>
+  <object id="227" name="spring" gid="183" x="5546.01" y="1249.51" width="21" height="28" rotation="660"/>
+  <object id="228" name="spring" gid="183" x="1574.31" y="554.334" width="21" height="28" rotation="269.61"/>
+  <object id="229" name="platform" gid="186" x="1947.33" y="477.085" width="32" height="19"/>
+  <object id="230" name="platform" gid="186" x="2063.67" y="530.915" width="32" height="19"/>
+  <object id="231" name="platform" gid="186" x="2005.67" y="500.918" width="32" height="19"/>
+  <object id="232" name="platform" gid="186" x="2117" y="558.833" width="32" height="19"/>
+  <object id="233" name="spring" gid="183" x="2322.08" y="683.975" width="21" height="28" rotation="299.61"/>
  </objectgroup>
 </map>

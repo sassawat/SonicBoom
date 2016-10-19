@@ -32,7 +32,7 @@ public class Spring extends GameObject {
 	}
 
 	@Override
-	public void customizeObject() {
+	public void customizeObject() {		
 		// create bump surface
 		FixtureDef fdef = new FixtureDef();
 		EdgeShape eShape = new EdgeShape();
@@ -51,6 +51,7 @@ public class Spring extends GameObject {
 	@Override
 	public void hit() {
 		// bump it!
+		game.player.body.setLinearVelocity(0, 0);
 		game.player.body.applyLinearImpulse(force, game.player.body.getWorldCenter(), true);
 
 		// trigger animation
