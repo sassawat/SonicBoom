@@ -166,6 +166,8 @@ public class WorldContactListener implements ContactListener {
 				}
 			}
 			break;
+		case SonicBoom.PLAYER_BIT | SonicBoom.RING_BIT:
+			contact.setEnabled(false);
 		}
 
 	}

@@ -6,15 +6,19 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.TextureMapObject;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.Fixture;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 
 public class GameObjects implements Disposable {
 
 	private GameScreen game;
-
 	private Array<Ring> rings;
 	private Animation ringAnimation;
 	private Texture ringTexture;
@@ -24,6 +28,10 @@ public class GameObjects implements Disposable {
 	private Array<Spring> springs;
 	private Array<Platform> platforms;
 
+	private Array<Ring> spawnedRings;
+	private BodyDef bdefRing;
+	private FixtureDef fdefRing;
+
 	public GameObjects(GameScreen game) {
 		this.game = game;
 
@@ -32,9 +40,11 @@ public class GameObjects implements Disposable {
 		createDashPanels();
 		createSprings();
 		createPlatform();
+
+		defineSpawnedRing();
 	}
 
-	public void createRings() {
+	private void createRings() {
 
 		rings = new Array<Ring>();
 
@@ -65,7 +75,7 @@ public class GameObjects implements Disposable {
 
 	}
 
-	public void createSpikes() {
+	private void createSpikes() {
 		spikes = new Array<Spike>();
 
 		for (MapObject object : game.getMap().getLayers().get("GameObject").getObjects()) {
@@ -79,7 +89,7 @@ public class GameObjects implements Disposable {
 		}
 	}
 
-	public void createDashPanels() {
+	private void createDashPanels() {
 		dashPanels = new Array<DashPanel>();
 
 		for (MapObject object : game.getMap().getLayers().get("GameObject").getObjects()) {
@@ -93,7 +103,7 @@ public class GameObjects implements Disposable {
 		}
 	}
 
-	public void createSprings() {
+	private void createSprings() {
 		springs = new Array<Spring>();
 
 		for (MapObject object : game.getMap().getLayers().get("GameObject").getObjects()) {
@@ -107,7 +117,7 @@ public class GameObjects implements Disposable {
 		}
 	}
 
-	public void createPlatform() {
+	private void createPlatform() {
 		platforms = new Array<Platform>();
 
 		for (MapObject object : game.getMap().getLayers().get("GameObject").getObjects()) {
@@ -121,9 +131,37 @@ public class GameObjects implements Disposable {
 		}
 	}
 
+	private void defineSpawnedRing() {
+		spawnedRings = new Array<Ring>();
+
+		bdefRing = new BodyDef();
+		fdefRing = new FixtureDef();
+
+		bdefRing.type = BodyType.DynamicBody;
+
+		CircleShape shape = new CircleShape();
+		shape.setRadius(8 / SonicBoom.PPM);
+		shape.setPosition(new Vector2(16 / 2 / SonicBoom.PPM, 16 / 2 / SonicBoom.PPM));
+		fdefRing.shape = shape;
+
+		fdefRing.filter.categoryBits = SonicBoom.RING_BIT;
+		fdefRing.restitution = 1f;
+	}
+
+	public void spawnRing(Vector2 point) {
+		bdefRing.position.set(point);
+		spawnedRings.add(new Ring(game, bdefRing, fdefRing, true, ringAnimation));
+
+	}
+
 	public void update(float delta) {
+
 		for (Ring ring : rings) {
 			ring.update(delta);
+
+			if (ring.destroyed) {
+				rings.removeValue(ring, true);
+			}
 		}
 
 		for (Spring spring : springs) {
@@ -132,6 +170,18 @@ public class GameObjects implements Disposable {
 
 		for (Platform platform : platforms) {
 			platform.update(delta);
+
+			if (platform.destroyed) {
+				platforms.removeValue(platform, true);
+			}
+		}
+
+		for (Ring ring : spawnedRings) {
+			ring.update(delta);
+
+			if (ring.destroyed && ring.getDestroyedTime() > 1) {
+				spawnedRings.removeValue(ring, true);
+			}
 		}
 	}
 
@@ -159,6 +209,11 @@ public class GameObjects implements Disposable {
 		// draw platforms
 		for (Platform platform : platforms) {
 			platform.draw(batch);
+		}
+
+		// draw spawned rings
+		for (Ring ring : spawnedRings) {
+			ring.draw(batch);
 		}
 	}
 

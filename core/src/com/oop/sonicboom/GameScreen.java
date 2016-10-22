@@ -63,7 +63,7 @@ public class GameScreen implements Screen {
 	PlayerInputProcessor playerInputProcessor;
 
 	// Game Object
-	GameObjects gameObject;
+	GameObjects gameObjects;
 
 	public GameScreen(SonicBoom game) {
 		this.game = game;
@@ -117,7 +117,7 @@ public class GameScreen implements Screen {
 		Gdx.input.setInputProcessor(playerInputProcessor);
 
 		// create game object
-		gameObject = new GameObjects(this);
+		gameObjects = new GameObjects(this);
 	}
 
 	@Override
@@ -181,6 +181,12 @@ public class GameScreen implements Screen {
 		if (Gdx.input.isKeyPressed(Keys.ESCAPE)) {
 			game.setScreen(new MenuScreen(game));
 		}
+
+		// Test ring spawning for now
+		if (Gdx.input.isKeyPressed(Keys.C)) {
+			gameObjects.spawnRing(
+					player.body.getPosition().add((player.faceRight ? 50 : -50) / SonicBoom.PPM, 20 / SonicBoom.PPM));
+		}
 	}
 
 	public void update(float delta) {
@@ -189,7 +195,7 @@ public class GameScreen implements Screen {
 
 		// update plater and game object
 		player.update(delta);
-		gameObject.update(delta);
+		gameObjects.update(delta);
 
 		// update cam position
 		gameCam.position.x = player.body.getWorldCenter().x;
@@ -227,7 +233,7 @@ public class GameScreen implements Screen {
 		// draw player and game object
 		game.batch.setProjectionMatrix(gameCam.combined);
 		game.batch.begin();
-		gameObject.draw(game.batch);
+		gameObjects.draw(game.batch);
 		player.draw(game.batch);
 		game.batch.end();
 

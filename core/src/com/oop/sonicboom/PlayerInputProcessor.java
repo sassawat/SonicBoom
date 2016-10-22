@@ -28,14 +28,14 @@ public class PlayerInputProcessor implements InputProcessor {
 			break;
 		case Keys.RIGHT:
 			player.crouch = false;
-			if (player.preSpin && player.onGround || player.spinJump) {
+			if (player.preSpin && player.onGround) {
 				player.spinning = true;
 			}
 			player.moveRight = true;
 			break;
 		case Keys.LEFT:
 			player.crouch = false;
-			if (player.preSpin && player.onGround || player.spinJump) {
+			if (player.preSpin && player.onGround) {
 				player.spinning = true;
 			}
 			player.moveLeft = true;

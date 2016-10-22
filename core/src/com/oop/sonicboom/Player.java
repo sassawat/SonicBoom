@@ -11,7 +11,7 @@ public abstract class Player extends Sprite implements Disposable {
 
 	protected Body body;
 	protected Fixture fixture;
-	
+
 	protected enum State {
 		IDLE, WALKING, RUNNING, SPINNING, SPINCHARGE, JUMPPING, CROUCHING
 	};
@@ -26,6 +26,7 @@ public abstract class Player extends Sprite implements Disposable {
 	protected boolean spinJump;
 	protected boolean crouch;
 	protected boolean loop;
+	protected boolean loseRing;
 
 	public Player(GameScreen game) {
 		this.game = game;
@@ -34,11 +35,11 @@ public abstract class Player extends Sprite implements Disposable {
 		fixture = game.parser.getFixtures().get("player");
 		fixture.setUserData(this);
 	}
-	
-	public void switchLoop(){
+
+	public void switchLoop() {
 		loop = loop ? false : true;
 	}
-	
+
 	abstract public State getState();
 
 	abstract public void update(float delta);
@@ -46,5 +47,7 @@ public abstract class Player extends Sprite implements Disposable {
 	abstract public void jump();
 
 	abstract public void dash();
+
+	abstract public void loseRing();
 
 }

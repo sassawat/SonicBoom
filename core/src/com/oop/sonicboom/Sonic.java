@@ -33,7 +33,7 @@ public class Sonic extends Player {
 		currentState = State.IDLE;
 		previousState = State.IDLE;
 		stateTimer = 0;
-		
+
 		faceRight = true;
 
 		texture = new Texture("Sprites/boss.png");
@@ -90,10 +90,7 @@ public class Sonic extends Player {
 		setRegion(getFrame(delta));
 		stateTimer += delta;
 
-		// update jump state
-		if (onGround) {
-			spinJump = false;
-		}
+		// wait another part for update ring losing here
 	}
 
 	public TextureRegion getFrame(float delta) {
@@ -157,10 +154,14 @@ public class Sonic extends Player {
 	}
 
 	private void updateMotion() {
+		// update jump state
+		if (onGround) {
+			spinJump = false;
+		}
 
 		Vector2 spd = body.getLinearVelocity();
-
-		if (isSpdDown(spd.x) && spinning && (spd.x <= 2f && spd.x >= -2f) && (spd.y <= 2f && spd.y >= -2f)) {
+		isSpdDown(spd.x);
+		if (isSpdDown(spd.x) && spinning && (spd.x <= 1f && spd.x >= -2f) && (spd.y <= 2f && spd.y >= -2f)) {
 			spinning = false;
 		}
 
@@ -220,5 +221,10 @@ public class Sonic extends Player {
 	@Override
 	public void dispose() {
 		texture.dispose();
+	}
+
+	@Override
+	public void loseRing() {
+		loseRing = true;
 	}
 }
