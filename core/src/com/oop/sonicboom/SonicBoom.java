@@ -17,7 +17,7 @@ public class SonicBoom extends Game {
 	public static final short GROUND_BIT = 1;
 	public static final short PLAYER_BIT = 2;
 	public static final short RING_BIT = 4;
-	public static final short DESTROYED_BIT = 8;
+	public static final short ENEMY_BIT = 8;
 	public static final short OBJECT_BIT = 16;
 	public static final short PLATFORM_BIT = 32;
 	public static final short LOOP_SWITCH_BIT = 64;
@@ -28,12 +28,17 @@ public class SonicBoom extends Game {
 
 	// used by all screens
 	public SpriteBatch batch;
+	public MenuScreen menu;
+	public GameScreen game;
 
 	@Override
 	public void create() {
 		batch = new SpriteBatch();
-		// setScreen(new GameScreen(this));
-		setScreen(new MenuScreen(this));
+
+		menu = new MenuScreen(this);
+		game = new GameScreen(this);
+
+		setScreen(menu);
 	}
 
 	@Override
@@ -44,5 +49,7 @@ public class SonicBoom extends Game {
 	@Override
 	public void dispose() {
 		batch.dispose();
+		menu.dispose();
+		game.dispose();
 	}
 }

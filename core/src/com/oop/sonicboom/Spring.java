@@ -32,7 +32,7 @@ public class Spring extends GameObject {
 	}
 
 	@Override
-	public void customizeObject() {		
+	public void customizeObject() {
 		// create bump surface
 		FixtureDef fdef = new FixtureDef();
 		EdgeShape eShape = new EdgeShape();

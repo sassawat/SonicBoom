@@ -1,25 +1,30 @@
 package com.oop.sonicboom;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.TextureMapObject;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.Disposable;
 
-public abstract class GameObject {
+public abstract class Enemy implements Disposable {
 
 	protected GameScreen game;
 	protected World world;
 	protected MapObject object;
 
 	protected Body body;
+	protected Fixture fixture;
 
 	protected TextureMapObject textureObject;
+	protected TextureRegion textureRegion;
 
 	protected float rotation;
 	protected float x;
@@ -30,18 +35,19 @@ public abstract class GameObject {
 	protected boolean toDestroy;
 	protected boolean destroyed;
 
-	public GameObject(GameScreen game, MapObject object) {
+	public Enemy(GameScreen game, MapObject object) {
 		this.game = game;
 		this.world = game.getWorld();
 		this.object = object;
 
 		this.textureObject = (TextureMapObject) object;
+		this.textureRegion = textureObject.getTextureRegion();
 
-		defineObject();
-		customizeObject();
+		defineEnemy();
+		customizeEnemy();
 	}
 
-	private void defineObject() {
+	private void defineEnemy() {
 		TextureMapObject textureMapObject = (TextureMapObject) object;
 
 		rotation = textureMapObject.getRotation();
@@ -63,7 +69,10 @@ public abstract class GameObject {
 		shape.setAsBox(width / 2, height / 2);
 		fdef.shape = shape;
 
-		body.createFixture(fdef);
+		fdef.filter.categoryBits = SonicBoom.ENEMY_BIT;
+
+		fixture = body.createFixture(fdef);
+		fixture.setUserData(this);
 	}
 
 	private void applyTiledLocationToBody(Body body, float x, float y, float width, float height, float rotation) {
@@ -92,7 +101,7 @@ public abstract class GameObject {
 	}
 
 	public void draw(Batch batch) {
-		batch.draw(textureObject.getTextureRegion(), x, y, textureObject.getOriginX() / SonicBoom.PPM,
+		batch.draw(textureRegion, x, y, textureObject.getOriginX() / SonicBoom.PPM,
 				textureObject.getOriginY() / SonicBoom.PPM,
 				textureObject.getTextureRegion().getRegionWidth() / SonicBoom.PPM,
 				textureObject.getTextureRegion().getRegionHeight() / SonicBoom.PPM, textureObject.getScaleX(),
@@ -100,7 +109,16 @@ public abstract class GameObject {
 
 	}
 
-	public abstract void customizeObject();
+	public void setRegion(TextureRegion textureRegion) {
+		this.textureRegion = textureRegion;
+	}
+
+	public void updatePosition() {
+		x = body.getPosition().x - width / 2;
+		y = body.getPosition().y - height / 2;
+	}
+
+	public abstract void customizeEnemy();
 
 	public abstract void update(float delta);
 

@@ -23,10 +23,7 @@ public class GameObjects implements Disposable {
 	private Animation ringAnimation;
 	private Texture ringTexture;
 
-	private Array<Spike> spikes;
-	private Array<DashPanel> dashPanels;
-	private Array<Spring> springs;
-	private Array<Platform> platforms;
+	private Array<GameObject> objects;
 
 	private Array<Ring> spawnedRings;
 	private BodyDef bdefRing;
@@ -36,10 +33,8 @@ public class GameObjects implements Disposable {
 		this.game = game;
 
 		createRings();
-		createSpikes();
-		createDashPanels();
-		createSprings();
-		createPlatform();
+
+		createGameObject();
 
 		defineSpawnedRing();
 	}
@@ -75,55 +70,19 @@ public class GameObjects implements Disposable {
 
 	}
 
-	private void createSpikes() {
-		spikes = new Array<Spike>();
+	private void createGameObject() {
+		objects = new Array<GameObject>();
 
 		for (MapObject object : game.getMap().getLayers().get("GameObject").getObjects()) {
 			try {
 				if (object instanceof TextureMapObject && object.getName().equals("spike")) {
-					spikes.add(new Spike(game, object));
-				}
-			} catch (NullPointerException e) {
-				// object has no name
-			}
-		}
-	}
-
-	private void createDashPanels() {
-		dashPanels = new Array<DashPanel>();
-
-		for (MapObject object : game.getMap().getLayers().get("GameObject").getObjects()) {
-			try {
-				if (object instanceof TextureMapObject && object.getName().equals("dp")) {
-					dashPanels.add(new DashPanel(game, object));
-				}
-			} catch (NullPointerException e) {
-				// object has no name
-			}
-		}
-	}
-
-	private void createSprings() {
-		springs = new Array<Spring>();
-
-		for (MapObject object : game.getMap().getLayers().get("GameObject").getObjects()) {
-			try {
-				if (object instanceof TextureMapObject && object.getName().equals("spring")) {
-					springs.add(new Spring(game, object));
-				}
-			} catch (NullPointerException e) {
-				// object has no name
-			}
-		}
-	}
-
-	private void createPlatform() {
-		platforms = new Array<Platform>();
-
-		for (MapObject object : game.getMap().getLayers().get("GameObject").getObjects()) {
-			try {
-				if (object instanceof TextureMapObject && object.getName().equals("platform")) {
-					platforms.add(new Platform(game, object));
+					objects.add(new Spike(game, object));
+				} else if (object instanceof TextureMapObject && object.getName().equals("dp")) {
+					objects.add(new DashPanel(game, object));
+				} else if (object instanceof TextureMapObject && object.getName().equals("spring")) {
+					objects.add(new Spring(game, object));
+				} else if (object instanceof TextureMapObject && object.getName().equals("platform")) {
+					objects.add(new Platform(game, object));
 				}
 			} catch (NullPointerException e) {
 				// object has no name
@@ -134,10 +93,7 @@ public class GameObjects implements Disposable {
 	private void defineSpawnedRing() {
 		spawnedRings = new Array<Ring>();
 
-		bdefRing = new BodyDef();
 		fdefRing = new FixtureDef();
-
-		bdefRing.type = BodyType.DynamicBody;
 
 		CircleShape shape = new CircleShape();
 		shape.setRadius(8 / SonicBoom.PPM);
@@ -149,9 +105,19 @@ public class GameObjects implements Disposable {
 	}
 
 	public void spawnRing(Vector2 point) {
+		bdefRing = new BodyDef();
+		bdefRing.type = BodyType.DynamicBody;
 		bdefRing.position.set(point);
-		spawnedRings.add(new Ring(game, bdefRing, fdefRing, true, ringAnimation));
 
+		Ring ring = new Ring(game, bdefRing, fdefRing, true, ringAnimation);
+		ring.setLifeTime(5);
+
+		spawnedRings.add(ring);
+
+	}
+
+	public void spawnRing(float x, float y) {
+		spawnRing(new Vector2(x, y));
 	}
 
 	public void update(float delta) {
@@ -164,23 +130,19 @@ public class GameObjects implements Disposable {
 			}
 		}
 
-		for (Spring spring : springs) {
-			spring.update(delta);
-		}
-
-		for (Platform platform : platforms) {
-			platform.update(delta);
-
-			if (platform.destroyed) {
-				platforms.removeValue(platform, true);
-			}
-		}
-
 		for (Ring ring : spawnedRings) {
 			ring.update(delta);
 
-			if (ring.destroyed && ring.getDestroyedTime() > 1) {
+			if (ring.destroyed && ring.getDestroyedTime() > 2) {
 				spawnedRings.removeValue(ring, true);
+			}
+		}
+
+		for (GameObject object : objects) {
+			object.update(delta);
+
+			if (object.destroyed) {
+				objects.removeValue(object, true);
 			}
 		}
 	}
@@ -191,29 +153,14 @@ public class GameObjects implements Disposable {
 			ring.draw(batch);
 		}
 
-		// draw spikes
-		for (Spike spike : spikes) {
-			spike.draw(batch);
-		}
-
-		// draw dash panel
-		for (DashPanel dashPanel : dashPanels) {
-			dashPanel.draw(batch);
-		}
-
-		// draw springs
-		for (Spring spring : springs) {
-			spring.draw(batch);
-		}
-
-		// draw platforms
-		for (Platform platform : platforms) {
-			platform.draw(batch);
-		}
-
 		// draw spawned rings
 		for (Ring ring : spawnedRings) {
 			ring.draw(batch);
+		}
+
+		// draw game objects
+		for (GameObject object : objects) {
+			object.draw(batch);
 		}
 	}
 

@@ -9,9 +9,6 @@ import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 
 public class Platform extends GameObject {
 
-	private boolean toDestroy;
-	public boolean destroyed;
-
 	public Platform(GameScreen game, MapObject object) {
 		super(game, object);
 	}

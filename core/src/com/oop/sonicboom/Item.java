@@ -25,6 +25,9 @@ public abstract class Item extends Sprite {
 	protected boolean toSpawn;
 
 	protected float destroyedTime;
+	protected float lifeTime;
+
+	protected float splashTime;
 
 	public Item(GameScreen game, BodyDef bdef, FixtureDef fdef, boolean toSpawn) {
 		this.game = game;
@@ -51,11 +54,13 @@ public abstract class Item extends Sprite {
 	public abstract void hit();
 
 	public void update(float delta) {
+		// destroy item
 		if (toDestroy && !destroyed) {
 			world.destroyBody(body);
 			destroyed = true;
 		}
 
+		// spawn item
 		if (toSpawn) {
 			this.body = world.createBody(bdef);
 			this.fixture = body.createFixture(fdef);
@@ -65,10 +70,21 @@ public abstract class Item extends Sprite {
 			toSpawn = false;
 		}
 
+		// dead time
 		if (destroyed) {
 			destroyedTime += delta;
 		}
 
+		// life time
+		if (lifeTime > 0) {
+			splash(1, 0.05f, delta);
+			lifeTime -= delta;
+		}
+		if (lifeTime < 0) {
+			destroy();
+		}
+
+		// update postion of sprite
 		setPosition(body.getPosition().x, body.getPosition().y);
 	}
 
@@ -85,4 +101,20 @@ public abstract class Item extends Sprite {
 		return destroyedTime;
 	}
 
+	public void setLifeTime(float time) {
+		this.lifeTime = time;
+	}
+
+	public void splash(float time, float freq, float delta) {
+		if (lifeTime <= time) {
+			if (splashTime > freq) {
+				setAlpha(0);
+				splashTime = 0;
+			} else {
+				setAlpha(1);
+			}
+			
+			splashTime += delta;
+		}
+	}
 }

@@ -58,12 +58,14 @@ public class GameScreen implements Screen {
 	public Box2DMapObjectParser parser;
 
 	// Player
-	Player player;
-
-	PlayerInputProcessor playerInputProcessor;
+	public Player player;
+	private PlayerInputProcessor playerInputProcessor;
 
 	// Game Object
-	GameObjects gameObjects;
+	public GameObjects gameObjects;
+
+	// Enemies
+	private Enemies enemies;
 
 	public GameScreen(SonicBoom game) {
 		this.game = game;
@@ -118,6 +120,9 @@ public class GameScreen implements Screen {
 
 		// create game object
 		gameObjects = new GameObjects(this);
+
+		// create enemies
+		enemies = new Enemies(this);
 	}
 
 	@Override
@@ -168,6 +173,9 @@ public class GameScreen implements Screen {
 		b2dr.dispose();
 		hud.dispose();
 		bg.dispose();
+		gameObjects.dispose();
+		player.dispose();
+		enemies.dispose();
 
 	}
 
@@ -179,7 +187,7 @@ public class GameScreen implements Screen {
 
 		// Return to menu
 		if (Gdx.input.isKeyPressed(Keys.ESCAPE)) {
-			game.setScreen(new MenuScreen(game));
+			game.setScreen(game.menu);
 		}
 
 		// Test ring spawning for now
@@ -193,8 +201,9 @@ public class GameScreen implements Screen {
 		// world callback time step
 		world.step(1 / 60f, 8, 3);
 
-		// update plater and game object
+		// update player, enemies and game object
 		player.update(delta);
+		enemies.update(delta);
 		gameObjects.update(delta);
 
 		// update cam position
@@ -230,10 +239,11 @@ public class GameScreen implements Screen {
 		// darw back layer of map
 		renderer.render(backLayer);
 
-		// draw player and game object
+		// draw player, enemies and game object
 		game.batch.setProjectionMatrix(gameCam.combined);
 		game.batch.begin();
 		gameObjects.draw(game.batch);
+		enemies.draw(game.batch);
 		player.draw(game.batch);
 		game.batch.end();
 
