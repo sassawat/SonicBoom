@@ -23,17 +23,15 @@ public class SampleEnemy extends Enemy {
 	}
 
 	private void defineAnimation() {
-		if (sprite == null || animation == null) {
-			sprite = new Texture("Sprites/sampleEnemySprite.png");
+		sprite = new Texture("Sprites/sampleEnemySprite.png");
 
-			Array<TextureRegion> frames = new Array<TextureRegion>();
-			frames.add(new TextureRegion(sprite, 0, 0, 32, 32));
-			frames.add(new TextureRegion(sprite, 32, 0, 32, 32));
-			frames.add(new TextureRegion(sprite, 64, 0, 32, 32));
-			frames.add(new TextureRegion(sprite, 96, 0, 32, 32));
+		Array<TextureRegion> frames = new Array<TextureRegion>();
+		frames.add(new TextureRegion(sprite, 0, 0, 32, 32));
+		frames.add(new TextureRegion(sprite, 32, 0, 32, 32));
+		frames.add(new TextureRegion(sprite, 64, 0, 32, 32));
+		frames.add(new TextureRegion(sprite, 96, 0, 32, 32));
 
-			animation = new Animation(0.2f, frames);
-		}
+		animation = new Animation(0.2f, frames);
 	}
 
 	private void moveAround(float limitDistance, float delta) {
@@ -90,9 +88,7 @@ public class SampleEnemy extends Enemy {
 
 	@Override
 	public void dispose() {
-		if (sprite != null) {
-			sprite.dispose();
-		}
+		sprite.dispose();
 	}
 
 }

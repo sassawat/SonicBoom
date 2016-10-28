@@ -30,7 +30,8 @@ public class Spike extends GameObject {
 	@Override
 	public void hit() {
 		pushBack(game.player, 0.125f, 0.2f);
-		game.player.loseRing();
+		game.player.hurt(1);
+		game.player.loseRing(5);
 	}
 
 	private void pushBack(Player player, float vx, float vy) {

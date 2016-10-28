@@ -1,6 +1,7 @@
 package com.oop.sonicboom;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -24,7 +25,12 @@ public class MenuScreen implements Screen {
 	}
 
 	public void handleInput() {
+		if (Gdx.input.isKeyJustPressed(Keys.ESCAPE)) {
+			game.setScreen(game.game);
+		}
 		if (Gdx.input.isTouched()) {
+			game.game.dispose();
+			game.game = new GameScreen(game);
 			game.setScreen(game.game);
 		}
 	}

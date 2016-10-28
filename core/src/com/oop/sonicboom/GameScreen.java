@@ -26,6 +26,7 @@ public class GameScreen implements Screen {
 	// basic GameScreen variables
 	private OrthographicCamera gameCam;
 	private Viewport gamePort;
+	private boolean updateCam;
 
 	// Tiled map variables
 	private TmxMapLoader maploader;
@@ -72,6 +73,7 @@ public class GameScreen implements Screen {
 
 		// create cam used to follow player through cam world
 		gameCam = new OrthographicCamera();
+		updateCam = true;
 
 		// create a StretchViewport
 		gamePort = new StretchViewport(SonicBoom.V_WIDTH / SonicBoom.PPM, SonicBoom.V_HEIGHT / SonicBoom.PPM, gameCam);
@@ -186,14 +188,18 @@ public class GameScreen implements Screen {
 			toggleDebug();
 
 		// Return to menu
-		if (Gdx.input.isKeyPressed(Keys.ESCAPE)) {
+		if (Gdx.input.isKeyJustPressed(Keys.ESCAPE)) {
 			game.setScreen(game.menu);
 		}
 
 		// Test ring spawning for now
 		if (Gdx.input.isKeyPressed(Keys.C)) {
-			gameObjects.spawnRing(
-					player.body.getPosition().add((player.faceRight ? 50 : -50) / SonicBoom.PPM, 20 / SonicBoom.PPM));
+			gameObjects.spawnRing(player.body.getWorldCenter().add(-8 / SonicBoom.PPM, 0.4f), 0, 3);
+		}
+
+		// Test kill player
+		if (Gdx.input.isKeyPressed(Keys.K)) {
+			player.kill();
 		}
 	}
 
@@ -207,20 +213,22 @@ public class GameScreen implements Screen {
 		gameObjects.update(delta);
 
 		// update cam position
-		gameCam.position.x = player.body.getWorldCenter().x;
-		gameCam.position.y = player.body.getWorldCenter().y;
-		// if cam out of map
-		if (gameCam.position.x - SonicBoom.V_WIDTH / 2 / SonicBoom.PPM < 0)
-			gameCam.position.x = SonicBoom.V_WIDTH / 2 / SonicBoom.PPM;
+		if (updateCam) {
+			gameCam.position.x = player.body.getWorldCenter().x;
+			gameCam.position.y = player.body.getWorldCenter().y;
+			// if cam out of map
+			if (gameCam.position.x - SonicBoom.V_WIDTH / 2 / SonicBoom.PPM < 0)
+				gameCam.position.x = SonicBoom.V_WIDTH / 2 / SonicBoom.PPM;
 
-		if (gameCam.position.x + SonicBoom.V_WIDTH / 2 / SonicBoom.PPM > mapPixelWidth / SonicBoom.PPM)
-			gameCam.position.x = mapPixelWidth / SonicBoom.PPM - SonicBoom.V_WIDTH / 2 / SonicBoom.PPM;
+			if (gameCam.position.x + SonicBoom.V_WIDTH / 2 / SonicBoom.PPM > mapPixelWidth / SonicBoom.PPM)
+				gameCam.position.x = mapPixelWidth / SonicBoom.PPM - SonicBoom.V_WIDTH / 2 / SonicBoom.PPM;
 
-		if (gameCam.position.y - SonicBoom.V_HEIGHT / 2 / SonicBoom.PPM < 0)
-			gameCam.position.y = SonicBoom.V_HEIGHT / 2 / SonicBoom.PPM;
+			if (gameCam.position.y - SonicBoom.V_HEIGHT / 2 / SonicBoom.PPM < 0)
+				gameCam.position.y = SonicBoom.V_HEIGHT / 2 / SonicBoom.PPM;
 
-		if (gameCam.position.y + SonicBoom.V_HEIGHT / 2 / SonicBoom.PPM > mapPixelHeight / SonicBoom.PPM)
-			gameCam.position.y = mapPixelHeight / SonicBoom.PPM - SonicBoom.V_HEIGHT / 2 / SonicBoom.PPM;
+			if (gameCam.position.y + SonicBoom.V_HEIGHT / 2 / SonicBoom.PPM > mapPixelHeight / SonicBoom.PPM)
+				gameCam.position.y = mapPixelHeight / SonicBoom.PPM - SonicBoom.V_HEIGHT / 2 / SonicBoom.PPM;
+		}
 
 		gameCam.update();
 		bgCam.update();
@@ -268,6 +276,10 @@ public class GameScreen implements Screen {
 
 	public void toggleDebug() {
 		debug = debug ? false : true;
+	}
+
+	public void setUpdateCam(boolean bool) {
+		updateCam = false;
 	}
 
 }

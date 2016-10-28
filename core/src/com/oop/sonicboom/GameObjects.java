@@ -104,10 +104,12 @@ public class GameObjects implements Disposable {
 		fdefRing.restitution = 1f;
 	}
 
-	public void spawnRing(Vector2 point) {
+	public void spawnRing(Vector2 point, float vX, float vY) {
 		bdefRing = new BodyDef();
 		bdefRing.type = BodyType.DynamicBody;
 		bdefRing.position.set(point);
+		bdefRing.linearVelocity.x = vX;
+		bdefRing.linearVelocity.y = vY;
 
 		Ring ring = new Ring(game, bdefRing, fdefRing, true, ringAnimation);
 		ring.setLifeTime(5);
@@ -116,8 +118,8 @@ public class GameObjects implements Disposable {
 
 	}
 
-	public void spawnRing(float x, float y) {
-		spawnRing(new Vector2(x, y));
+	public void spawnRing(float x, float y, float vX, float vY) {
+		spawnRing(new Vector2(x, y), vX, vY);
 	}
 
 	public void update(float delta) {

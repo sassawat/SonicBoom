@@ -13,11 +13,20 @@ public abstract class Player extends Sprite implements Disposable {
 	protected Fixture fixture;
 
 	protected enum State {
-		IDLE, WALKING, RUNNING, SPINNING, SPINCHARGE, JUMPPING, CROUCHING
+		IDLE, WALKING, RUNNING, SPINNING, SPINCHARGE, JUMPPING, CROUCHING, HURTING, DYING
 	};
 
+	// player game state
 	protected boolean faceRight;
 	protected boolean onGround;
+	protected boolean loop;
+	protected boolean loseRing;
+	protected boolean hurt;
+	protected boolean dead;
+
+	protected int tempRing;
+
+	// player motion state
 	protected boolean moveRight;
 	protected boolean moveLeft;
 	protected boolean preSpin;
@@ -25,8 +34,6 @@ public abstract class Player extends Sprite implements Disposable {
 	protected boolean spinning;
 	protected boolean spinJump;
 	protected boolean crouch;
-	protected boolean loop;
-	protected boolean loseRing;
 
 	public Player(GameScreen game) {
 		this.game = game;
@@ -48,6 +55,10 @@ public abstract class Player extends Sprite implements Disposable {
 
 	abstract public void dash();
 
-	abstract public void loseRing();
+	abstract public void loseRing(int n);
+
+	abstract public void hurt(float time);
+
+	abstract public void kill();
 
 }
