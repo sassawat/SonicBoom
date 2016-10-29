@@ -5,7 +5,7 @@ import com.badlogic.gdx.InputProcessor;
 
 public class PlayerInputProcessor implements InputProcessor {
 
-	Player player;
+	private Player player;
 
 	public PlayerInputProcessor(Player player) {
 		this.player = player;

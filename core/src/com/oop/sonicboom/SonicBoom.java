@@ -30,6 +30,7 @@ public class SonicBoom extends Game {
 	public SpriteBatch batch;
 	public MenuScreen menu;
 	public GameScreen game;
+	public static int currentMap;
 
 	@Override
 	public void create() {

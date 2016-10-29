@@ -60,7 +60,6 @@ public class GameScreen implements Screen {
 
 	// Player
 	public Player player;
-	private PlayerInputProcessor playerInputProcessor;
 
 	// Game Object
 	public GameObjects gameObjects;
@@ -80,7 +79,13 @@ public class GameScreen implements Screen {
 
 		// Load map and setup our map renderer
 		maploader = new TmxMapLoader();
-		map = maploader.load("Maps/testMap.tmx");
+
+		if (SonicBoom.currentMap == 1) {
+			map = maploader.load("Maps/Neo_Green_Hill_1.tmx");
+		} else {
+			map = maploader.load("Maps/testMap.tmx");
+		}
+
 		renderer = new OrthogonalTiledMapRenderer(map, 1 / SonicBoom.PPM);
 		mapProperties = map.getProperties();
 		mapWidth = mapProperties.get("width", Integer.class);
@@ -116,15 +121,12 @@ public class GameScreen implements Screen {
 		// create Sonic!
 		player = new Sonic(this);
 
-		// create PlayerInputProcessor
-		playerInputProcessor = new PlayerInputProcessor(player);
-		Gdx.input.setInputProcessor(playerInputProcessor);
-
 		// create game object
 		gameObjects = new GameObjects(this);
 
 		// create enemies
 		enemies = new Enemies(this);
+
 	}
 
 	@Override
@@ -138,9 +140,9 @@ public class GameScreen implements Screen {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-		handleInput(delta);
 		update(delta);
 		renderWorld(delta);
+		handleInput(delta);
 	}
 
 	@Override
@@ -171,8 +173,8 @@ public class GameScreen implements Screen {
 
 		map.dispose();
 		renderer.dispose();
-		world.dispose();
 		b2dr.dispose();
+		world.dispose();
 		hud.dispose();
 		bg.dispose();
 		gameObjects.dispose();
@@ -198,8 +200,22 @@ public class GameScreen implements Screen {
 		}
 
 		// Test kill player
-		if (Gdx.input.isKeyPressed(Keys.K)) {
+		if (Gdx.input.isKeyJustPressed(Keys.K)) {
 			player.kill();
+		}
+
+		// Test change map
+		if (Gdx.input.isKeyJustPressed(Keys.NUM_1)) {
+			dispose();
+			SonicBoom.currentMap = 1;
+			game.game = new GameScreen(game);
+			game.setScreen(game.game);
+		}
+		if (Gdx.input.isKeyJustPressed(Keys.NUM_0)) {
+			dispose();
+			SonicBoom.currentMap = 0;
+			game.game = new GameScreen(game);
+			game.setScreen(game.game);
 		}
 	}
 

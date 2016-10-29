@@ -21,15 +21,14 @@ public class Enemies implements Disposable {
 	private void createEnemies() {
 		enemies = new Array<Enemy>();
 
-		for (MapObject object : game.getMap().getLayers().get("Enemies").getObjects()) {
-			try {
+		try {
+			for (MapObject object : game.getMap().getLayers().get("Enemies").getObjects()) {
 				if (object instanceof TextureMapObject && object.getName().equals("sampleEnemy")) {
 					enemies.add(new SampleEnemy(game, object));
 				}
-			} catch (NullPointerException e) {
-				// enemy has no name
-				System.out.println("some exception occur");
 			}
+		} catch (NullPointerException e) {
+			// some data not found in map
 		}
 	}
 
