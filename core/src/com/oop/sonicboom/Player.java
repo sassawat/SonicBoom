@@ -2,6 +2,7 @@ package com.oop.sonicboom;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.utils.Disposable;
@@ -12,6 +13,9 @@ public abstract class Player extends Sprite implements Disposable {
 
 	protected Body body;
 	protected Fixture fixture;
+
+	protected float rotation;
+	protected Vector2 contactPoint;
 
 	protected enum State {
 		IDLE, WALKING, RUNNING, SPINNING, SPINCHARGE, JUMPPING, CROUCHING, HURTING, DYING
@@ -24,6 +28,7 @@ public abstract class Player extends Sprite implements Disposable {
 	protected boolean loseRing;
 	protected boolean hurt;
 	protected boolean dead;
+	protected boolean onLoop;
 
 	protected int tempRing;
 
@@ -49,6 +54,8 @@ public abstract class Player extends Sprite implements Disposable {
 		// create PlayerInputProcessor
 		playerInputProcessor = new PlayerInputProcessor(this);
 		Gdx.input.setInputProcessor(playerInputProcessor);
+
+		contactPoint = new Vector2();
 	}
 
 	public void switchLoop() {

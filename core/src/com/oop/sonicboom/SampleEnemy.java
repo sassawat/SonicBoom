@@ -14,12 +14,15 @@ public class SampleEnemy extends Enemy {
 	private float stateTime;
 
 	private float distance;
+	private float limitDistance;
 	private boolean go;
 
 	public SampleEnemy(GameScreen game, MapObject object) {
 		super(game, object);
 
 		defineAnimation();
+
+		limitDistance = 3;
 	}
 
 	private void defineAnimation() {
@@ -34,7 +37,7 @@ public class SampleEnemy extends Enemy {
 		animation = new Animation(0.2f, frames);
 	}
 
-	private void moveAround(float limitDistance, float delta) {
+	private void moveAround(float delta) {
 		if (distance < 0) {
 			go = true;
 		} else if (distance > limitDistance) {
@@ -76,8 +79,8 @@ public class SampleEnemy extends Enemy {
 		// update position
 		updatePosition();
 
-		// make it moving arounf
-		moveAround(3, delta);
+		// make it moving around
+		moveAround(delta);
 	}
 
 	@Override

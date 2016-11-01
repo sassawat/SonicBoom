@@ -6,6 +6,8 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
@@ -47,6 +49,7 @@ public class GameScreen implements Screen {
 	public WorldContactListener worldContactListener;
 	private Box2DDebugRenderer b2dr;
 	private boolean debug;
+	private ShapeRenderer shapeRenderer;
 
 	// Hud
 	private Hud hud;
@@ -104,6 +107,7 @@ public class GameScreen implements Screen {
 
 		// allows for debug lines of box2d world.
 		b2dr = new Box2DDebugRenderer();
+		shapeRenderer = new ShapeRenderer();
 
 		// create hud
 		hud = new Hud();
@@ -275,8 +279,18 @@ public class GameScreen implements Screen {
 		renderer.render(foreLayer);
 
 		// debug
-		if (debug)
+		if (debug) {
 			b2dr.render(world, gameCam.combined);
+
+			gameCam.update();
+			shapeRenderer.setProjectionMatrix(gameCam.combined);
+
+			shapeRenderer.begin(ShapeType.Line);
+			shapeRenderer.setColor(1, 0, 0, 1);
+			shapeRenderer.line(player.contactPoint.x, player.contactPoint.y, player.body.getWorldCenter().x,
+					player.body.getWorldCenter().y);
+			shapeRenderer.end();
+		}
 
 		// draw HUD
 		hud.render();

@@ -87,6 +87,30 @@ public class WorldContactListener implements ContactListener {
 	public void endContact(Contact contact) {
 		// reset the default state of the contact in case it comes back for more
 		contact.setEnabled(true);
+
+		Fixture fixA = contact.getFixtureA();
+		Fixture fixB = contact.getFixtureB();
+
+		// collision define
+		int cDef = fixA.getFilterData().categoryBits | fixB.getFilterData().categoryBits;
+
+		switch (cDef) {
+		case SonicBoom.PLAYER_BIT | SonicBoom.LOOP_R_BIT:
+			if (fixA.getFilterData().categoryBits == SonicBoom.PLAYER_BIT) {
+				((Player) fixA.getUserData()).onLoop = false;
+			} else {
+				((Player) fixB.getUserData()).onLoop = false;
+			}
+			break;
+		case SonicBoom.PLAYER_BIT | SonicBoom.LOOP_L_BIT:
+			if (fixA.getFilterData().categoryBits == SonicBoom.PLAYER_BIT) {
+				((Player) fixA.getUserData()).onLoop = false;
+			} else {
+				((Player) fixB.getUserData()).onLoop = false;
+			}
+			break;
+		}
+
 	}
 
 	@Override
@@ -138,7 +162,7 @@ public class WorldContactListener implements ContactListener {
 					Vector2 relativePoint = platform.getLocalPoint(worldManifold.getPoints()[i]);
 					float platformFaceY = 0.5f;// front of platform, from
 												// fixture definition :(
-					if (relativePoint.y > platformFaceY - 0.05)
+					if (relativePoint.y > platformFaceY - 0.45f)
 						return;// contact point is less than 5cm inside front
 								// face of platfrom
 				} else
@@ -151,13 +175,20 @@ public class WorldContactListener implements ContactListener {
 			break;
 		case SonicBoom.PLAYER_BIT | SonicBoom.LOOP_R_BIT:
 			if (fixA.getFilterData().categoryBits == SonicBoom.PLAYER_BIT) {
+
 				if (((Player) fixA.getUserData()).loop == false) {
 					contact.setEnabled(false);
+				} else {
+					((Player) fixA.getUserData()).contactPoint = contact.getWorldManifold().getPoints()[0];
+					((Player) fixA.getUserData()).onLoop = true;
 				}
 
 			} else {
 				if (((Player) fixB.getUserData()).loop == false) {
 					contact.setEnabled(false);
+				} else {
+					((Player) fixB.getUserData()).contactPoint = contact.getWorldManifold().getPoints()[0];
+					((Player) fixB.getUserData()).onLoop = true;
 				}
 			}
 			break;
@@ -165,11 +196,17 @@ public class WorldContactListener implements ContactListener {
 			if (fixA.getFilterData().categoryBits == SonicBoom.PLAYER_BIT) {
 				if (((Player) fixA.getUserData()).loop == true) {
 					contact.setEnabled(false);
+				} else {
+					((Player) fixA.getUserData()).contactPoint = contact.getWorldManifold().getPoints()[0];
+					((Player) fixA.getUserData()).onLoop = true;
 				}
 
 			} else {
 				if (((Player) fixB.getUserData()).loop == true) {
 					contact.setEnabled(false);
+				} else {
+					((Player) fixB.getUserData()).contactPoint = contact.getWorldManifold().getPoints()[0];
+					((Player) fixB.getUserData()).onLoop = true;
 				}
 			}
 			break;

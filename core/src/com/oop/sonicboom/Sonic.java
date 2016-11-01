@@ -37,6 +37,8 @@ public class Sonic extends Player {
 	private float hurtTime;
 	private float deadTime;
 
+	private float deLoopTime;
+
 	public Sonic(GameScreen game) {
 		super(game);
 
@@ -98,6 +100,8 @@ public class Sonic extends Player {
 		setBounds(0, 0, 50 / SonicBoom.PPM, 82 / SonicBoom.PPM);
 
 		deadTime = 0.5f;
+
+		setOrigin(26 / SonicBoom.PPM, (26 + 8) / 2 / SonicBoom.PPM);
 	}
 
 	@Override
@@ -138,6 +142,29 @@ public class Sonic extends Player {
 				game.setUpdateCam(false);
 			}
 		}
+
+		// update rotation while on loop
+		if (onLoop) {
+			Vector2 p1 = contactPoint;
+			Vector2 p2 = body.getWorldCenter();
+
+			rotation = (float) (Math.atan2(p2.y - p1.y, p2.x - p1.x) * 180 / Math.PI) - 90;
+			setRotation(rotation);
+
+			deLoopTime = delta;
+		} else if (!onLoop && deLoopTime > 0) {
+			deLoopTime -= delta;
+		} else {
+			if (rotation > 0) {
+				rotation = rotation < 9.81f ? 0 : rotation - 9.81f;
+			}
+			if (rotation < 0) {
+				rotation = rotation > -9.81f ? 0 : rotation + 9.81f;
+			}
+
+			setRotation(rotation);
+		}
+
 	}
 
 	public TextureRegion getFrame(float delta) {
