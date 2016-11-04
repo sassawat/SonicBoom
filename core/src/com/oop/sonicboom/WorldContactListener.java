@@ -123,16 +123,17 @@ public class WorldContactListener implements ContactListener {
 
 		switch (cDef) {
 		case SonicBoom.PLAYER_BIT | SonicBoom.PLATFORM_BIT:
-
-			Body player = null;
+			Body playerBody = null;
 			Body platform = null;
 
 			if (fixA.getFilterData().categoryBits == SonicBoom.PLAYER_BIT) {
-				player = fixA.getBody();
+				playerBody = fixA.getBody();
 				platform = fixB.getBody();
+
 			} else {
-				player = fixB.getBody();
+				playerBody = fixB.getBody();
 				platform = fixA.getBody();
+
 			}
 
 			int numPoints = contact.getWorldManifold().getNumberOfContactPoints();
@@ -140,7 +141,7 @@ public class WorldContactListener implements ContactListener {
 
 			// check if contact points are moving downward
 			for (int i = 0; i < numPoints; i++) {
-				Vector2 pointVel = player.getLinearVelocityFromWorldPoint(worldManifold.getPoints()[i]);
+				Vector2 pointVel = playerBody.getLinearVelocityFromWorldPoint(worldManifold.getPoints()[i]);
 
 				if (pointVel.y < 0)
 					return;// point is moving down, leave contact solid and exit
@@ -149,9 +150,10 @@ public class WorldContactListener implements ContactListener {
 			// check if contact points are moving into platform
 			for (int i = 0; i < numPoints; i++) {
 				Vector2 pointVelPlatform = platform.getLinearVelocityFromWorldPoint(worldManifold.getPoints()[i]);
-				Vector2 pointVelOther = player.getLinearVelocityFromWorldPoint(worldManifold.getPoints()[i]);
-				Vector2 relativeVel = platform.getLocalVector(
-						new Vector2(pointVelOther.x - pointVelPlatform.x, pointVelOther.y - pointVelPlatform.y));
+				Vector2 pointVelOther = playerBody.getLinearVelocityFromWorldPoint(worldManifold.getPoints()[i]);
+				Vector2 relativeVel = platform.getLocalVector(pointVelOther.sub(pointVelPlatform));
+
+				Vector2 relativePoint = platform.getLocalPoint(worldManifold.getPoints()[i]);
 
 				if (relativeVel.y < -1) // if moving down faster than 1 m/s,
 										// handle as before
@@ -159,14 +161,16 @@ public class WorldContactListener implements ContactListener {
 							// and exit
 				else if (relativeVel.y < 1) { // if moving slower than 1 m/s
 					// borderline case, moving only slightly out of platform
-					Vector2 relativePoint = platform.getLocalPoint(worldManifold.getPoints()[i]);
 					float platformFaceY = 0.5f;// front of platform, from
 												// fixture definition :(
-					if (relativePoint.y > platformFaceY - 0.45f)
+					float platformFaceX = 0.5f;
+
+					if (relativePoint.y > platformFaceY - 100 && relativePoint.x > platformFaceX - 100)
 						return;// contact point is less than 5cm inside front
 								// face of platfrom
-				} else
+				} else {
 					;// moving up faster than 1 m/s
+				}
 
 			}
 

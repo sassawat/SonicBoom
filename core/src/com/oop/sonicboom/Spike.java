@@ -31,7 +31,7 @@ public class Spike extends GameObject {
 	public void hit() {
 		pushBack(game.player, 0.125f, 0.2f);
 		game.player.hurt(1);
-		game.player.loseRing(5);
+		game.player.loseRing(GameScorer.clearScore());
 	}
 
 	private void pushBack(Player player, float vx, float vy) {

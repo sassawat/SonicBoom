@@ -115,7 +115,7 @@ public class Sonic extends Player {
 		stateTimer += delta;
 
 		// update ring losing
-		if (loseRing) {
+		if (loseRing && tempRing > 0) {
 			game.gameObjects.spawnRing(body.getWorldCenter().add(-8 / SonicBoom.PPM, 0.4f), r.nextInt(5) - 2, 3);
 			tempRing--;
 
@@ -322,7 +322,9 @@ public class Sonic extends Player {
 
 	@Override
 	public void kill() {
-		dead = true;
+		if (!dead) {
+			dead = true;
+		}
 
 	}
 }

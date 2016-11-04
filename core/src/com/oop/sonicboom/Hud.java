@@ -14,35 +14,69 @@ public class Hud implements Disposable {
 
 	// Scene2D.ui Stage and its own Viewport for HUD
 	public Stage stage;
-	public Viewport viewport;
+	private Viewport viewport;
+	private String worldTimer;
+	private long timeCount;
+	private int minutes;
+	private int seconds;
+	private int millis;
 
-	// Scene2D widgets
-	private Label testText;
+	private Label countdownLabel;
+	private static Label scoreLabel;
+	private Label timeLabel;
+	private Label levelLabel;
+	private Label worldLabel;
+	private Label sonicLabel;
 
 	public Hud() {
 		// setup the HUD viewport using a new camera seperate from our gamecam
 		// define our stage using that viewport and our games spritebatch
 		viewport = new FitViewport(SonicBoom.V_WIDTH, SonicBoom.V_HEIGHT, new OrthographicCamera());
 		stage = new Stage(viewport);
-
-		// define a table used to organize our hud's labels
 		Table table = new Table();
-		// Top-Align table
 		table.top();
-		// make the table fill the entire stage
 		table.setFillParent(true);
+
+		countdownLabel = new Label(String.format("%06d", worldTimer),
+				new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+		scoreLabel = new Label(String.format("%06d", 0), new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+		timeLabel = new Label("Time", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+		levelLabel = new Label("Sea", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+		worldLabel = new Label("MAP", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+		sonicLabel = new Label("Boss", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
 
 		// define our labels using the String, and a Label style consisting of a
 		// font and color
-		testText = new Label("Hello Sonic Boom!, press arrow to explore",
-				new Label.LabelStyle(new BitmapFont(), Color.WHITE));
 
-		// add our labels to our table, padding the top, and giving them all
-		// equal width with expandX
-		table.add(testText).expandX().padTop(10);
+		table.add(sonicLabel).expandX().padTop(10);
+		table.add(worldLabel).expandX().padTop(10);
+		table.add(timeLabel).expandX();
+		table.row();
+		table.add(scoreLabel).expandX();
+		table.add(levelLabel).expandX();
+		table.add(countdownLabel).expandX();
 
-		// add our table to the stage
 		stage.addActor(table);
+
+	}
+
+	private void updateWorldTimer() {
+		timeCount = GameScorer.getTimeCount();
+
+		millis = (int) (timeCount % 1000) / 10;
+		seconds = (int) (timeCount / 1000);
+		minutes = seconds / 60;
+		seconds -= minutes * 60;
+
+		worldTimer = String.format("%02d", minutes) + ':' + String.format("%02d", seconds) + ':'
+				+ String.format("%02d", millis);
+		countdownLabel.setText(worldTimer);
+	}
+
+	public void update(float delta) {
+		updateWorldTimer();
+		scoreLabel.setText(GameScorer.getScore() + "");
+
 	}
 
 	public void render() {
@@ -53,5 +87,4 @@ public class Hud implements Disposable {
 	public void dispose() {
 		stage.dispose();
 	}
-
 }

@@ -28,18 +28,12 @@ public class SonicBoom extends Game {
 
 	// used by all screens
 	public SpriteBatch batch;
-	public MenuScreen menu;
-	public GameScreen game;
-	public static int currentMap;
 
 	@Override
 	public void create() {
 		batch = new SpriteBatch();
 
-		menu = new MenuScreen(this);
-		game = new GameScreen(this);
-
-		setScreen(menu);
+		setScreen(new MenuScreen(this));
 	}
 
 	@Override
@@ -50,7 +44,5 @@ public class SonicBoom extends Game {
 	@Override
 	public void dispose() {
 		batch.dispose();
-		menu.dispose();
-		game.dispose();
 	}
 }

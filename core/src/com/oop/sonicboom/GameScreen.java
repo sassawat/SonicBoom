@@ -21,6 +21,15 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import net.dermetfan.gdx.physics.box2d.Box2DMapObjectParser;
 
 public class GameScreen implements Screen {
+	// Game State
+	public static final int GAME_READY = 0;
+	public static final int GAME_RUNNING = 1;
+	public static final int GAME_PAUSED = 2;
+	public static final int GAME_OVER = 4;
+
+	public static int state;
+
+	private static int currentMap;
 
 	// Reference to our Game, used to set Screens
 	final SonicBoom game;
@@ -83,7 +92,7 @@ public class GameScreen implements Screen {
 		// Load map and setup our map renderer
 		maploader = new TmxMapLoader();
 
-		if (SonicBoom.currentMap == 1) {
+		if (currentMap == 1) {
 			map = maploader.load("Maps/Neo_Green_Hill_1.tmx");
 		} else {
 			map = maploader.load("Maps/testMap.tmx");
@@ -131,6 +140,10 @@ public class GameScreen implements Screen {
 		// create enemies
 		enemies = new Enemies(this);
 
+		// start game scorer
+		GameScorer.start();
+
+		state = GAME_RUNNING;
 	}
 
 	@Override
@@ -141,11 +154,8 @@ public class GameScreen implements Screen {
 
 	@Override
 	public void render(float delta) {
-		Gdx.gl.glClearColor(0, 0, 0, 1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
 		update(delta);
-		renderWorld(delta);
+		draw(delta);
 		handleInput(delta);
 	}
 
@@ -156,13 +166,19 @@ public class GameScreen implements Screen {
 
 	@Override
 	public void pause() {
-		// TODO Auto-generated method stub
+		if (state == GAME_RUNNING) {
+			state = GAME_PAUSED;
+			GameScorer.pause();
+		}
 
 	}
 
 	@Override
 	public void resume() {
-		// TODO Auto-generated method stub
+		if (state == GAME_PAUSED) {
+			state = GAME_RUNNING;
+			GameScorer.reseume();
+		}
 
 	}
 
@@ -187,7 +203,7 @@ public class GameScreen implements Screen {
 
 	}
 
-	public void handleInput(float delta) {
+	private void handleInput(float delta) {
 
 		// toggle debug mode
 		if (Gdx.input.isKeyJustPressed(Keys.SLASH))
@@ -195,7 +211,7 @@ public class GameScreen implements Screen {
 
 		// Return to menu
 		if (Gdx.input.isKeyJustPressed(Keys.ESCAPE)) {
-			game.setScreen(game.menu);
+			game.setScreen(new MenuScreen(game));
 		}
 
 		// Test ring spawning for now
@@ -205,25 +221,54 @@ public class GameScreen implements Screen {
 
 		// Test kill player
 		if (Gdx.input.isKeyJustPressed(Keys.K)) {
-			player.kill();
+			forceGameOver();
+		}
+
+		// Test reset score
+		if (Gdx.input.isKeyJustPressed(Keys.R)) {
+			GameScorer.reset();
+		}
+
+		// Test pause
+		if (Gdx.input.isKeyJustPressed(Keys.P)) {
+			if (state == GAME_RUNNING) {
+				pause();
+			} else {
+				resume();
+			}
 		}
 
 		// Test change map
 		if (Gdx.input.isKeyJustPressed(Keys.NUM_1)) {
 			dispose();
-			SonicBoom.currentMap = 1;
-			game.game = new GameScreen(game);
-			game.setScreen(game.game);
+			currentMap = 1;
+			game.setScreen(new GameScreen(game));
 		}
 		if (Gdx.input.isKeyJustPressed(Keys.NUM_0)) {
 			dispose();
-			SonicBoom.currentMap = 0;
-			game.game = new GameScreen(game);
-			game.setScreen(game.game);
+			currentMap = 0;
+			game.setScreen(new GameScreen(game));
 		}
 	}
 
-	public void update(float delta) {
+	private void update(float delta) {
+		switch (state) {
+		case GAME_READY:
+			state = GAME_RUNNING;
+			break;
+		case GAME_RUNNING:
+			updateRunning(delta);
+			break;
+		case GAME_PAUSED:
+			updatePaused(delta);
+			break;
+		case GAME_OVER:
+			updateGameOver(delta);
+			break;
+		}
+	}
+
+	private void updateRunning(float delta) {
 		// world callback time step
 		world.step(1 / 60f, 8, 3);
 
@@ -254,10 +299,38 @@ public class GameScreen implements Screen {
 		bgCam.update();
 
 		renderer.setView(gameCam);
+
+		// update HUD
+		hud.update(delta);
 	}
 
-	public void renderWorld(float delta) {
+	private void updatePaused(float delta) {
+		// update pause screen
+	}
 
+	private void updateGameOver(float delta) {
+		updateRunning(delta);
+		player.kill();
+	}
+
+	private void draw(float delta) {
+		Gdx.gl.glClearColor(0, 0, 0, 1);
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+		switch (state) {
+		case GAME_RUNNING:
+			presentRunning();
+			break;
+		case GAME_PAUSED:
+			presentPaused();
+			break;
+		case GAME_OVER:
+			presentGameOver();
+			break;
+		}
+	}
+
+	private void presentRunning() {
 		// draw static background
 		game.batch.setProjectionMatrix(bgCam.combined);
 		game.batch.begin();
@@ -284,7 +357,6 @@ public class GameScreen implements Screen {
 
 			gameCam.update();
 			shapeRenderer.setProjectionMatrix(gameCam.combined);
-
 			shapeRenderer.begin(ShapeType.Line);
 			shapeRenderer.setColor(1, 0, 0, 1);
 			shapeRenderer.line(player.contactPoint.x, player.contactPoint.y, player.body.getWorldCenter().x,
@@ -294,6 +366,18 @@ public class GameScreen implements Screen {
 
 		// draw HUD
 		hud.render();
+	}
+
+	private void presentPaused() {
+		// overlay running
+		presentRunning();
+		// render pause menu screen
+	}
+
+	private void presentGameOver() {
+		// overlay running
+		presentRunning();
+		// render game over screen
 	}
 
 	public TiledMap getMap() {
@@ -309,7 +393,15 @@ public class GameScreen implements Screen {
 	}
 
 	public void setUpdateCam(boolean bool) {
-		updateCam = false;
+		updateCam = bool;
+	}
+
+	public static void forceGameOver() {
+		state = GAME_OVER;
+	}
+
+	public static boolean isGameOver() {
+		return state == GAME_OVER;
 	}
 
 }

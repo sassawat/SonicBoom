@@ -31,7 +31,7 @@ public class Ring extends Item {
 
 	@Override
 	public void hit() {
-		// add Ring /score
+		GameScorer.addScore(1);
 		destroy();
 	}
 
