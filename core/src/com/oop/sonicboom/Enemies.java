@@ -27,8 +27,8 @@ public class Enemies implements Disposable {
 					enemies.add(new SampleEnemy(game, object));
 				}
 			}
-		} catch (NullPointerException e) {
-			// some data not found in map
+		} catch (Exception e) {
+			System.out.println("load Enemy failed.");
 		}
 	}
 

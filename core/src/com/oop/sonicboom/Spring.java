@@ -53,6 +53,7 @@ public class Spring extends GameObject {
 		// bump it!
 		game.player.body.setLinearVelocity(0, 0);
 		game.player.body.applyLinearImpulse(force, game.player.body.getWorldCenter(), true);
+		game.player.onGround = false;
 
 		// trigger animation
 		play = true;

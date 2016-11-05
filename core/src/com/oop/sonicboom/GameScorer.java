@@ -12,6 +12,7 @@ public class GameScorer {
 	private static int score;
 
 	public static void start() {
+		reset();
 		startTime = TimeUtils.millis();
 
 	}

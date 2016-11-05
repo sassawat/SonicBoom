@@ -6,6 +6,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.maps.MapProperties;
@@ -21,18 +22,24 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import net.dermetfan.gdx.physics.box2d.Box2DMapObjectParser;
 
 public class GameScreen implements Screen {
+	// Reference to our Game, used to set Screens
+	final SonicBoom game;
+
 	// Game State
 	public static final int GAME_READY = 0;
 	public static final int GAME_RUNNING = 1;
 	public static final int GAME_PAUSED = 2;
 	public static final int GAME_OVER = 4;
 
-	public static int state;
+	private static int state;
+
+	// screen that relate to GameScreen
+	PauseMenuScreen pauseMenu;
 
 	private static int currentMap;
 
-	// Reference to our Game, used to set Screens
-	final SonicBoom game;
+	// batch for draw
+	Batch batch;
 
 	// basic GameScreen variables
 	private OrthographicCamera gameCam;
@@ -81,6 +88,9 @@ public class GameScreen implements Screen {
 
 	public GameScreen(SonicBoom game) {
 		this.game = game;
+		this.batch = game.batch;
+
+		pauseMenu = new PauseMenuScreen(this);
 
 		// create cam used to follow player through cam world
 		gameCam = new OrthographicCamera();
@@ -148,7 +158,7 @@ public class GameScreen implements Screen {
 
 	@Override
 	public void show() {
-		// TODO Auto-generated method stub
+		Gdx.input.setInputProcessor(player.getInputProcessor());
 
 	}
 
@@ -162,6 +172,7 @@ public class GameScreen implements Screen {
 	@Override
 	public void resize(int width, int height) {
 		gamePort.update(width, height);
+		pauseMenu.resize(width, height);
 	}
 
 	@Override
@@ -169,6 +180,8 @@ public class GameScreen implements Screen {
 		if (state == GAME_RUNNING) {
 			state = GAME_PAUSED;
 			GameScorer.pause();
+			pauseMenu.show();
+			hide();
 		}
 
 	}
@@ -178,6 +191,8 @@ public class GameScreen implements Screen {
 		if (state == GAME_PAUSED) {
 			state = GAME_RUNNING;
 			GameScorer.reseume();
+			pauseMenu.hide();
+			show();
 		}
 
 	}
@@ -200,6 +215,7 @@ public class GameScreen implements Screen {
 		gameObjects.dispose();
 		player.dispose();
 		enemies.dispose();
+		pauseMenu.dispose();
 
 	}
 
@@ -209,9 +225,13 @@ public class GameScreen implements Screen {
 		if (Gdx.input.isKeyJustPressed(Keys.SLASH))
 			toggleDebug();
 
-		// Return to menu
+		// pause / resume
 		if (Gdx.input.isKeyJustPressed(Keys.ESCAPE)) {
-			game.setScreen(new MenuScreen(game));
+			if (state == GAME_RUNNING) {
+				pause();
+			} else {
+				resume();
+			}
 		}
 
 		// Test ring spawning for now
@@ -227,15 +247,6 @@ public class GameScreen implements Screen {
 		// Test reset score
 		if (Gdx.input.isKeyJustPressed(Keys.R)) {
 			GameScorer.reset();
-		}
-
-		// Test pause
-		if (Gdx.input.isKeyJustPressed(Keys.P)) {
-			if (state == GAME_RUNNING) {
-				pause();
-			} else {
-				resume();
-			}
 		}
 
 		// Test change map
@@ -305,7 +316,7 @@ public class GameScreen implements Screen {
 	}
 
 	private void updatePaused(float delta) {
-		// update pause screen
+		pauseMenu.update(delta);
 	}
 
 	private void updateGameOver(float delta) {
@@ -319,34 +330,34 @@ public class GameScreen implements Screen {
 
 		switch (state) {
 		case GAME_RUNNING:
-			presentRunning();
+			presentRunning(delta);
 			break;
 		case GAME_PAUSED:
-			presentPaused();
+			presentPaused(delta);
 			break;
 		case GAME_OVER:
-			presentGameOver();
+			presentGameOver(delta);
 			break;
 		}
 	}
 
-	private void presentRunning() {
+	private void presentRunning(float delta) {
 		// draw static background
-		game.batch.setProjectionMatrix(bgCam.combined);
-		game.batch.begin();
-		game.batch.draw(bg, 0, 0, SonicBoom.V_WIDTH, SonicBoom.V_HEIGHT);
-		game.batch.end();
+		batch.setProjectionMatrix(bgCam.combined);
+		batch.begin();
+		batch.draw(bg, 0, 0, SonicBoom.V_WIDTH, SonicBoom.V_HEIGHT);
+		batch.end();
 
 		// darw back layer of map
 		renderer.render(backLayer);
 
 		// draw player, enemies and game object
-		game.batch.setProjectionMatrix(gameCam.combined);
-		game.batch.begin();
+		batch.setProjectionMatrix(gameCam.combined);
+		batch.begin();
 		gameObjects.draw(game.batch);
 		enemies.draw(game.batch);
 		player.draw(game.batch);
-		game.batch.end();
+		batch.end();
 
 		// draw foregraound of map
 		renderer.render(foreLayer);
@@ -368,15 +379,14 @@ public class GameScreen implements Screen {
 		hud.render();
 	}
 
-	private void presentPaused() {
-		// overlay running
-		presentRunning();
+	private void presentPaused(float delta) {
 		// render pause menu screen
+		pauseMenu.render(delta);
 	}
 
-	private void presentGameOver() {
+	private void presentGameOver(float delta) {
 		// overlay running
-		presentRunning();
+		presentRunning(delta);
 		// render game over screen
 	}
 

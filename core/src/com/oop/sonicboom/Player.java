@@ -1,6 +1,6 @@
 package com.oop.sonicboom;
 
-import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -46,14 +46,17 @@ public abstract class Player extends Sprite implements Disposable {
 	public Player(GameScreen game) {
 		this.game = game;
 
-		// find body for player
-		body = game.parser.getBodies().get("player");
-		fixture = game.parser.getFixtures().get("player");
-		fixture.setUserData(this);
+		try {
+			// find body for player
+			body = game.parser.getBodies().get("player");
+			fixture = game.parser.getFixtures().get("player");
+			fixture.setUserData(this);
+		} catch (Exception e) {
+			System.out.println("load Player failed.");
+		}
 
 		// create PlayerInputProcessor
 		playerInputProcessor = new PlayerInputProcessor(this);
-		Gdx.input.setInputProcessor(playerInputProcessor);
 
 		contactPoint = new Vector2();
 	}
@@ -75,5 +78,9 @@ public abstract class Player extends Sprite implements Disposable {
 	abstract public void hurt(float time);
 
 	abstract public void kill();
+
+	public InputProcessor getInputProcessor() {
+		return playerInputProcessor;
+	}
 
 }

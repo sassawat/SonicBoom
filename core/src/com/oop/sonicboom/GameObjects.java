@@ -73,8 +73,9 @@ public class GameObjects implements Disposable {
 	private void createGameObject() {
 		objects = new Array<GameObject>();
 
-		for (MapObject object : game.getMap().getLayers().get("GameObject").getObjects()) {
-			try {
+		try {
+			for (MapObject object : game.getMap().getLayers().get("GameObject").getObjects()) {
+
 				if (object instanceof TextureMapObject && object.getName().equals("spike")) {
 					objects.add(new Spike(game, object));
 				} else if (object instanceof TextureMapObject && object.getName().equals("dp")) {
@@ -84,9 +85,9 @@ public class GameObjects implements Disposable {
 				} else if (object instanceof TextureMapObject && object.getName().equals("platform")) {
 					objects.add(new Platform(game, object));
 				}
-			} catch (NullPointerException e) {
-				// object has no name
 			}
+		} catch (Exception e) {
+			System.out.println("load GameObject failed.");
 		}
 	}
 
