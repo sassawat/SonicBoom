@@ -104,7 +104,11 @@ public class GameScreen implements Screen {
 
 		if (currentMap == 1) {
 			map = maploader.load("Maps/Neo_Green_Hill_1.tmx");
-		} else {
+		} 
+		else if (currentMap == 2) {
+			map = maploader.load("Maps/Hot_Crater_Act_2.tmx");
+		}
+		else {
 			map = maploader.load("Maps/testMap.tmx");
 		}
 
@@ -132,9 +136,20 @@ public class GameScreen implements Screen {
 		hud = new Hud();
 
 		// create background
-		bg = new Texture("Maps/bg.png");
-		bgCam = new OrthographicCamera(SonicBoom.V_WIDTH, SonicBoom.V_HEIGHT);
-		bgCam.position.set(SonicBoom.V_WIDTH / 2, SonicBoom.V_HEIGHT / 2, 0);
+		if (currentMap == 1) {
+			bg = new Texture("Maps/bg.png");
+			bgCam = new OrthographicCamera(SonicBoom.V_WIDTH, SonicBoom.V_HEIGHT);
+			bgCam.position.set(SonicBoom.V_WIDTH / 2, SonicBoom.V_HEIGHT / 2, 0);
+		}
+		else if (currentMap == 2) {
+			bg = new Texture("Maps/bg_map2.png");
+			bgCam = new OrthographicCamera(SonicBoom.V_WIDTH, SonicBoom.V_HEIGHT);
+			bgCam.position.set(SonicBoom.V_WIDTH / 2, SonicBoom.V_HEIGHT / 2, 0);
+		} else {
+			bg = new Texture("Maps/bg.png");
+			bgCam = new OrthographicCamera(SonicBoom.V_WIDTH, SonicBoom.V_HEIGHT);
+			bgCam.position.set(SonicBoom.V_WIDTH / 2, SonicBoom.V_HEIGHT / 2, 0);
+		}
 
 		// parse box2d object from map
 		parser = new Box2DMapObjectParser(1 / SonicBoom.PPM);
