@@ -25,8 +25,8 @@ public class MenuScreen implements Screen {
 
 	public void handleInput() {
 		if (Gdx.input.isTouched()) {
-			game.setScreen(new GameScreen(game));
 			dispose();
+			game.setScreen(new GameScreen(game));
 		}
 	}
 

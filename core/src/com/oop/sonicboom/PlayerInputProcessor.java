@@ -5,7 +5,7 @@ import com.badlogic.gdx.InputProcessor;
 
 public class PlayerInputProcessor implements InputProcessor {
 
-	Player player;
+	private Player player;
 
 	public PlayerInputProcessor(Player player) {
 		this.player = player;
@@ -23,16 +23,19 @@ public class PlayerInputProcessor implements InputProcessor {
 			}
 			if (!player.spinning) {
 				player.preSpin = true;
+				player.crouch = true;
 			}
 			break;
 		case Keys.RIGHT:
+			player.crouch = false;
 			if (player.preSpin && player.onGround) {
 				player.spinning = true;
 			}
 			player.moveRight = true;
 			break;
 		case Keys.LEFT:
-			if (player.preSpin && player.onGround || player.spinJump) {
+			player.crouch = false;
+			if (player.preSpin && player.onGround) {
 				player.spinning = true;
 			}
 			player.moveLeft = true;
@@ -57,6 +60,7 @@ public class PlayerInputProcessor implements InputProcessor {
 		case Keys.UP:
 			break;
 		case Keys.DOWN:
+			player.crouch = false;
 			if (player.spinCharged) {
 				player.spinCharged = false;
 				player.spinning = true;

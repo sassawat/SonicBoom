@@ -1,5 +1,7 @@
 package com.oop.sonicboom;
 
+import java.util.Random;
+
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -10,10 +12,6 @@ public class Sonic extends Player {
 
 	public final float MAX_NORM_SPD = 4f;
 	public final float MAX_SPIN_SPD = 5.75f;
-
-	private enum State {
-		IDLE, WALKING, RUNNING, SPINNING, SPINCHARGE
-	};
 
 	private State currentState;
 	private State previousState;
@@ -26,8 +24,20 @@ public class Sonic extends Player {
 	private Animation run;
 	private Animation spin;
 	private Animation charge;
+	private Animation jump;
+	private Animation crouching;
+	private Animation hurting;
+	private Animation dying;
 
 	private Texture texture;
+
+	// for direction of spawn ring
+	private static Random r = new Random();
+
+	private float hurtTime;
+	private float deadTime;
+
+	private float deLoopTime;
 
 	public Sonic(GameScreen game) {
 		super(game);
@@ -36,42 +46,62 @@ public class Sonic extends Player {
 		previousState = State.IDLE;
 		stateTimer = 0;
 
-		texture = new Texture("Sprites/sonic.png");
+		faceRight = true;
+
+		texture = new Texture("Sprites/boss.png");
 
 		Array<TextureRegion> frames = new Array<TextureRegion>();
 
 		// get idle animation frames and add them to sonic Animation
-		for (int i = 1; i < 8; i++)
-			frames.add(new TextureRegion(texture, 5 + 36 * i, 10, 36, 34));
+		for (int i = 1; i < 5; i++)
+			frames.add(new TextureRegion(texture, 110 + 47 * i, 123, 45, 82));
 		idle = new Animation(0.2f, frames);
 		frames.clear();
 
-		// get walk animation frames and add them to sonic Animation
-		for (int i = 1; i < 6; i++)
-			frames.add(new TextureRegion(texture, 275 + 36 * i, 100, 37, 37));
+		// get walk and run animation frames and add them to sonic Animation
+		for (int i = 1; i < 5; i++)
+			frames.add(new TextureRegion(texture, 110 + 47 * i, 204, 45, 82));
 		walk = new Animation(0.2f, frames);
-		frames.clear();
-
-		// get run animation frames and add them to sonic Animation
-		for (int i = 1; i < 8; i++)
-			frames.add(new TextureRegion(texture, 39 * i, 144, 37, 36));
-		run = new Animation(0.12f, frames);
+		run = new Animation(0.1f, frames);
 		frames.clear();
 
 		// get spin animation frames and add them to sonic Animation
 		for (int i = 1; i < 4; i++)
-			frames.add(new TextureRegion(texture, 112 + (36 * i), 235, 32, 32));
-		spin = new Animation(0.1f, frames);
+			frames.add(new TextureRegion(texture, 525 + 51 * i, 609, 45, 82));
+		spin = new Animation(0.125f, frames);
 		frames.clear();
 
 		// get spin charge animation frames and add them to sonic Animation
-		for (int i = 1; i < 4; i++)
-			frames.add(new TextureRegion(texture, 853 + (36 * i), 190, 32, 32));
-		charge = new Animation(0.1f, frames);
+		frames.add(new TextureRegion(texture, 527, 610, 45, 82));
+		charge = new Animation(0, frames);
+		frames.clear();
+
+		// get jump animation frames and add them to sonic Animation
+		for (int i = 2; i < 5; i++)
+			frames.add(new TextureRegion(texture, 110 + 47 * i, 312, 45, 82));
+		jump = new Animation(0.2f, frames);
+		frames.clear();
+
+		// get crouch animation frames and add them to sonic Animation
+		for (int i = 7; i < 9; i++)
+			frames.add(new TextureRegion(texture, 110 + 45 * i, 312, 45, 82));
+		crouching = new Animation(0.2f, frames);
+		frames.clear();
+
+		// get hurting and dying animation frames and add them to sonic
+		// Animation
+		for (int i = 0; i < 3; i++)
+			frames.add(new TextureRegion(texture, 575 + 50 * i, 440, 50, 82));
+		hurting = new Animation(0.2f, frames);
+		dying = new Animation(0.2f, frames);
 		frames.clear();
 
 		// set area of sprite
-		setBounds(0, 0, 34 / SonicBoom.PPM, 34 / SonicBoom.PPM);
+		setBounds(0, 0, 50 / SonicBoom.PPM, 82 / SonicBoom.PPM);
+
+		deadTime = 0.5f;
+
+		setOrigin(26 / SonicBoom.PPM, (26 + 8) / 2 / SonicBoom.PPM);
 	}
 
 	@Override
@@ -80,14 +110,61 @@ public class Sonic extends Player {
 		updateMotion();
 
 		// set position of sprite and update frames
-		setPosition(body.getWorldCenter().x - getWidth() / 2, body.getWorldCenter().y - getHeight() / 2);
+		setPosition(body.getWorldCenter().x - getWidth() / 2, body.getWorldCenter().y - 18 / SonicBoom.PPM);
 		setRegion(getFrame(delta));
 		stateTimer += delta;
 
-		// update jump state
-		if (onGround) {
-			spinJump = false;
+		// update ring losing
+		if (loseRing && tempRing > 0) {
+			game.gameObjects.spawnRing(body.getWorldCenter().add(-8 / SonicBoom.PPM, 0.4f), r.nextInt(5) - 2, 3);
+			tempRing--;
+
+			if (tempRing <= 0) {
+				loseRing = false;
+			}
 		}
+
+		// hurting time update
+		if (hurt) {
+			hurtTime -= delta;
+
+			if (hurtTime <= 0) {
+				hurt = false;
+			}
+		}
+
+		// after dead update
+		if (dead) {
+			deadTime -= delta;
+
+			if (deadTime <= 0) {
+				fixture.setSensor(true);
+				game.setUpdateCam(false);
+			}
+		}
+
+		// update rotation while on loop
+		if (onLoop) {
+			Vector2 p1 = contactPoint;
+			Vector2 p2 = body.getWorldCenter();
+
+			rotation = (float) (Math.atan2(p2.y - p1.y, p2.x - p1.x) * 180 / Math.PI) - 90;
+			setRotation(rotation);
+
+			deLoopTime = delta;
+		} else if (!onLoop && deLoopTime > 0) {
+			deLoopTime -= delta;
+		} else {
+			if (rotation > 0) {
+				rotation = rotation < 9.81f ? 0 : rotation - 9.81f;
+			}
+			if (rotation < 0) {
+				rotation = rotation > -9.81f ? 0 : rotation + 9.81f;
+			}
+
+			setRotation(rotation);
+		}
+
 	}
 
 	public TextureRegion getFrame(float delta) {
@@ -96,6 +173,18 @@ public class Sonic extends Player {
 		TextureRegion region;
 
 		switch (currentState) {
+		case DYING:
+			region = dying.getKeyFrame(stateTimer, true);
+			break;
+		case HURTING:
+			region = hurting.getKeyFrame(stateTimer, true);
+			break;
+		case CROUCHING:
+			region = crouching.getKeyFrame(stateTimer, true);
+			break;
+		case JUMPPING:
+			region = jump.getKeyFrame(stateTimer);
+			break;
 		case SPINCHARGE:
 			region = charge.getKeyFrame(stateTimer, true);
 			break;
@@ -114,9 +203,9 @@ public class Sonic extends Player {
 			break;
 		}
 
-		if (faceRight && !region.isFlipX()) {
+		if (!faceRight && !region.isFlipX()) {
 			region.flip(true, false);
-		} else if (!faceRight && region.isFlipX()) {
+		} else if (faceRight && region.isFlipX()) {
 			region.flip(true, false);
 		}
 
@@ -127,10 +216,18 @@ public class Sonic extends Player {
 	}
 
 	public State getState() {
-		if (spinCharged) {
+		if (dead) {
+			return State.DYING;
+		} else if (hurt) {
+			return State.HURTING;
+		} else if (spinJump) {
+			return State.JUMPPING;
+		} else if (spinCharged) {
 			return State.SPINCHARGE;
-		} else if (spinning || spinJump) {
+		} else if (spinning) {
 			return State.SPINNING;
+		} else if (crouch) {
+			return State.CROUCHING;
 		} else if (body.getLinearVelocity().x > 2f || body.getLinearVelocity().x < -2f) {
 			return State.RUNNING;
 		} else if (body.getLinearVelocity().x > 0.1f || body.getLinearVelocity().x < -0.1f) {
@@ -141,11 +238,21 @@ public class Sonic extends Player {
 	}
 
 	private void updateMotion() {
+		// update jump state
+		if (onGround) {
+			spinJump = false;
+		}
 
 		Vector2 spd = body.getLinearVelocity();
-
-		if (isSpdDown(spd.x) && spinning && (spd.x <= 2f && spd.x >= -2f) && (spd.y <= 2f && spd.y >= -2f)) {
+		isSpdDown(spd.x);
+		if (isSpdDown(spd.x) && spinning && (spd.x <= 1f && spd.x >= -2f) && (spd.y <= 2f && spd.y >= -2f)) {
 			spinning = false;
+		}
+
+		if (crouch) {
+			body.setLinearDamping(1);
+		} else {
+			body.setLinearDamping(0);
 		}
 
 		if (spinCharged) {
@@ -198,5 +305,26 @@ public class Sonic extends Player {
 	@Override
 	public void dispose() {
 		texture.dispose();
+	}
+
+	@Override
+	public void loseRing(int n) {
+		tempRing = n;
+		loseRing = true;
+	}
+
+	@Override
+	public void hurt(float time) {
+		hurtTime = time;
+		hurt = true;
+
+	}
+
+	@Override
+	public void kill() {
+		if (!dead) {
+			dead = true;
+		}
+
 	}
 }
