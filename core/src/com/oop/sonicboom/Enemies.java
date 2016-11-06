@@ -26,6 +26,12 @@ public class Enemies implements Disposable {
 				if (object instanceof TextureMapObject && object.getName().equals("sampleEnemy")) {
 					enemies.add(new SampleEnemy(game, object));
 				}
+				if (object instanceof TextureMapObject && object.getName().equals("enemyFly")) {
+					enemies.add(new EnemyFly(game, object));
+				}
+				if (object instanceof TextureMapObject && object.getName().equals("sheepEnemy")) {
+					enemies.add(new SheepEnemy(game, object));
+				}
 			}
 		} catch (Exception e) {
 			System.out.println("load Enemy failed.");

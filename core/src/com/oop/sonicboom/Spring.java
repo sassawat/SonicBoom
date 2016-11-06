@@ -28,7 +28,7 @@ public class Spring extends GameObject {
 
 		animation = new Animation(0.05f, idle, expand, expanded);
 
-		force = new Vector2(0.25f, 0).rotate(-rotation);
+		force = new Vector2(0.4f, 0).rotate(-rotation);
 	}
 
 	@Override
